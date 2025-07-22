@@ -1,18 +1,22 @@
 <?php
 
-declare(strict_types=1);
+/**
+ * This file is part of the Spryker Commerce OS.
+ * For full license information, please view the LICENSE file that was distributed with this source code.
+ */
+
+declare(strict_types = 1);
 
 namespace SprykerCommunity\Zed\TourGuide\Communication;
 
 use Generated\Shared\Transfer\TourGuideStepTransfer;
 use Generated\Shared\Transfer\TourGuideTransfer;
-use SprykerCommunity\Zed\TourGuide\Communication\Form\TourGuideForm;
-use SprykerCommunity\Zed\TourGuide\Communication\Form\TourGuideStepForm;
-use SprykerCommunity\Zed\TourGuide\Communication\Table\TourGuideStepTable;
-use SprykerCommunity\Zed\TourGuide\Communication\Table\TourGuideTable;
-use SprykerCommunity\Zed\TourGuide\TourGuideDependencyProvider;
 use Spryker\Zed\Acl\Business\AclFacadeInterface;
 use Spryker\Zed\Kernel\Communication\AbstractCommunicationFactory;
+use SprykerCommunity\Zed\TourGuide\Communication\Form\TourGuideForm;
+use SprykerCommunity\Zed\TourGuide\Communication\Form\TourGuideStepForm;
+use SprykerCommunity\Zed\TourGuide\Communication\Table\TourGuideTable;
+use SprykerCommunity\Zed\TourGuide\TourGuideDependencyProvider;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 
@@ -24,7 +28,7 @@ final class TourGuideCommunicationFactory extends AbstractCommunicationFactory
     public function createTourGuideTable(): TourGuideTable
     {
         return new TourGuideTable(
-            $this->getFacade()
+            $this->getFacade(),
         );
     }
 
@@ -35,7 +39,7 @@ final class TourGuideCommunicationFactory extends AbstractCommunicationFactory
             $tourGuideTransfer,
             [
                 'data_class' => TourGuideTransfer::class,
-            ]
+            ],
         );
     }
 
@@ -46,7 +50,7 @@ final class TourGuideCommunicationFactory extends AbstractCommunicationFactory
             $tourGuideStepTransfer,
             [
                 'data_class' => TourGuideStepTransfer::class,
-            ]
+            ],
         );
     }
 

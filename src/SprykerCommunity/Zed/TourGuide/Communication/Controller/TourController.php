@@ -1,6 +1,11 @@
 <?php
 
-declare(strict_types=1);
+/**
+ * This file is part of the Spryker Commerce OS.
+ * For full license information, please view the LICENSE file that was distributed with this source code.
+ */
+
+declare(strict_types = 1);
 
 namespace SprykerCommunity\Zed\TourGuide\Communication\Controller;
 
@@ -33,14 +38,14 @@ class TourController extends AbstractController
         $tourGuideTable = $this->getFactory()->createTourGuideTable();
 
         return $this->jsonResponse(
-            $tourGuideTable->fetchData()
+            $tourGuideTable->fetchData(),
         );
     }
 
     /**
      * @param \Symfony\Component\HttpFoundation\Request $request
      *
-     * @return array|\Symfony\Component\HttpFoundation\RedirectResponse
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|array
      */
     public function createAction(Request $request): array|RedirectResponse
     {
@@ -65,7 +70,7 @@ class TourController extends AbstractController
     /**
      * @param \Symfony\Component\HttpFoundation\Request $request
      *
-     * @return array|\Symfony\Component\HttpFoundation\RedirectResponse
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|array
      */
     public function editAction(Request $request): array|RedirectResponse
     {

@@ -1,6 +1,11 @@
 <?php
 
-declare(strict_types=1);
+/**
+ * This file is part of the Spryker Commerce OS.
+ * For full license information, please view the LICENSE file that was distributed with this source code.
+ */
+
+declare(strict_types = 1);
 
 namespace SprykerCommunityTest\Zed\TourGuide\Business\Validator;
 
@@ -11,7 +16,7 @@ use SprykerCommunity\Zed\TourGuide\Business\Validator\RouteValidator;
 
 final class RouteValidatorTest extends TestCase
 {
-    public function test_route_validation_successful_with_valid_route(): void
+    public function testRouteValidationSuccessfulWithValidRoute(): void
     {
         // Arrange
         $zedRouteCollector = $this->createMock(ZedRouteCollectorInterface::class);
@@ -25,10 +30,10 @@ final class RouteValidatorTest extends TestCase
         $isValid = $routeValidationService->validateZedUrl($routeValidationRequestTransfer);
 
         // Assert
-        self::assertTrue($isValid);
+        static::assertTrue($isValid);
     }
 
-    public function test_route_validation_not_successful_with_invalid_route(): void
+    public function testRouteValidationNotSuccessfulWithInvalidRoute(): void
     {
         $zedRouteCollector = $this->createMock(ZedRouteCollectorInterface::class);
 
@@ -40,6 +45,6 @@ final class RouteValidatorTest extends TestCase
 
         $assert = $routeValidationService->validateZedUrl($routeValidationRequestTransfer);
 
-        self::assertFalse($assert);
+        static::assertFalse($assert);
     }
 }

@@ -1,5 +1,12 @@
 <?php
 
+/**
+ * This file is part of the Spryker Commerce OS.
+ * For full license information, please view the LICENSE file that was distributed with this source code.
+ */
+
+declare(strict_types = 1);
+
 namespace SprykerCommunity\Zed\TourGuide\Business;
 
 use Generated\Shared\Transfer\TourGuideCollectionTransfer;
@@ -20,7 +27,7 @@ interface TourGuideFacadeInterface
      * @return \Generated\Shared\Transfer\TourGuideCollectionTransfer
      */
     public function getTourGuideCollection(
-        TourGuideCriteriaTransfer $tourGuideCriteriaTransfer
+        TourGuideCriteriaTransfer $tourGuideCriteriaTransfer,
     ): TourGuideCollectionTransfer;
 
     /**
@@ -66,7 +73,7 @@ interface TourGuideFacadeInterface
      * - Returns a collection of tour guide steps based on the provided criteria.
      */
     public function getTourGuideStepCollection(
-        TourGuideStepCriteriaTransfer $tourGuideStepCriteriaTransfer
+        TourGuideStepCriteriaTransfer $tourGuideStepCriteriaTransfer,
     ): TourGuideStepCollectionTransfer;
 
     /**
