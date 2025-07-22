@@ -1,0 +1,33 @@
+parameters:
+    level: 4
+    paths:
+        - src
+    reportUnmatchedIgnoredErrors: false
+    bootstrapFiles:
+            - phpstan-bootstrap.php
+    ignoreErrors:
+        - '#Call to an undefined method [a-zA-Z0-9\\_]+::[a-zA-Z0-9\\_]+\(\)#'
+        - '#Parameter \$[a-zA-Z0-9\\_]+ of method [a-zA-Z0-9\\_\\:]+\(\) has invalid type Generated\\Shared\\Transfer\\[a-zA-Z0-9\\_]+#'
+        - '#Method [a-zA-Z0-9\\_\\:]+\(\) has invalid return type Generated\\Shared\\Transfer\\[a-zA-Z0-9\\_]+#'
+        - '#Instantiated class Generated\\Shared\\Transfer\\[a-zA-Z0-9\\_]+ not found#'
+        - '#Instantiated class Orm\\Zed\\TourGuide\\Persistence\\[a-zA-Z0-9\\_]+ not found#'
+        - '#Call to method [a-zA-Z0-9\\_]+\(\) on an unknown class Generated\\Shared\\Transfer\\[a-zA-Z0-9\\_]+#'
+        - '#PHPDoc tag @var for variable \$[a-zA-Z0-9\\_]+ contains unknown class Generated\\Shared\\Transfer\\[a-zA-Z0-9\\_]+#'
+        - '#Class Generated\\Shared\\Transfer\\[a-zA-Z0-9\\_]+ not found#'
+        - '#Access to constant COL_[A-Z_]+ on an unknown class Orm\\Zed\\TourGuide\\Persistence\\Map\\PyzTourGuideStepTableMap#'
+        - '#Access to constant COL_[A-Z_]+ on an unknown class Orm\\Zed\\TourGuide\\Persistence\\Map\\PyzTourGuideTableMap#'
+        - '#Unsafe access to private constant SprykerCommunity\\Zed\\TourGuide\\Communication\\Table\\TourGuideStepTable::COL_ACTIONS through static::#'
+        - '#Call to static method create\(\) on an unknown class Orm\\Zed\\TourGuide\\Persistence\\PyzTourGuideQuery#'
+        - '#Call to static method create\(\) on an unknown class Orm\\Zed\\TourGuide\\Persistence\\PyzTourGuideStepQuery#'
+        - '#Call to method [a-zA-Z0-9\\_]+\(\) on an unknown class Orm\\Zed\\TourGuide\\Persistence\\PyzTourGuide#'
+        - '#Call to method [a-zA-Z0-9\\_]+\(\) on an unknown class Orm\\Zed\\TourGuide\\Persistence\\PyzTourGuideStep#'
+        - '#Call to method [a-zA-Z0-9\\_]+\(\) on an unknown class Orm\\Zed\\TourGuide\\Persistence\\PyzTourGuideQuery#'
+        - '#Call to method [a-zA-Z0-9\\_]+\(\) on an unknown class Orm\\Zed\\TourGuide\\Persistence\\PyzTourGuideStepQuery#'
+        - '#Parameter \$[a-zA-Z0-9\\_]+ of method [a-zA-Z0-9\\_\\:]+\(\) has invalid type Orm\\Zed\\TourGuide\\Persistence\\PyzTourGuide#'
+        - '#Parameter \$[a-zA-Z0-9\\_]+ of method [a-zA-Z0-9\\_\\:]+\(\) has invalid type Orm\\Zed\\TourGuide\\Persistence\\PyzTourGuideStep#'
+        - '#Method [a-zA-Z0-9\\_\\:]+\(\) has invalid return type Orm\\Zed\\TourGuide\\Persistence\\PyzTourGuide#'
+        - '#Method [a-zA-Z0-9\\_\\:]+\(\) has invalid return type Orm\\Zed\\TourGuide\\Persistence\\PyzTourGuideStep#'
+        - '#Method [a-zA-Z0-9\\_\\:]+\(\) has invalid return type Spryker\\Zed\\Acl\\Business\\AclFacadeInterface#'
+        - '#Call to method getAllGroups\(\) on an unknown class Spryker\\Zed\\Acl\\Business\\AclFacadeInterface#'
+        - '#Variable \$steps on left side of \?\? always exists and is not nullable#'
+        - '#Offset 0 on non-empty-list<string> on left side of \?\? always exists and is not nullable#'

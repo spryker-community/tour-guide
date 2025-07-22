@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<config>
+    <tour-guide>
+        <label>Tour Guide</label>
+        <title>Tour Guide</title>
+        <icon>fa-map-signs</icon>
+        <bundle>tour-guide</bundle>
+        <controller>tour</controller>
+        <action>index</action>
+        <pages>
+            <tour-list>
+                <label>Tour List</label>
+                <title>Tour List</title>
+                <bundle>tour-guide</bundle>
+                <controller>tour</controller>
+                <action>index</action>
+                <visible>1</visible>
+            </tour-list>
+            <create-tour>
+                <label>Create Tour</label>
+                <title>Create Tour</title>
+                <bundle>tour-guide</bundle>
+                <controller>tour</controller>
+                <action>create</action>
+                <visible>1</visible>
+            </create-tour>
+        </pages>
+    </tour-guide>
+</config>

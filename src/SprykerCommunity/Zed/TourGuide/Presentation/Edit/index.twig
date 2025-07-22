@@ -1,0 +1,25 @@
+{% extends '@Gui/Layout/layout.twig' %}
+
+{% if widget_title is not defined %}
+    {% set widget_title = 'Edit Tour Guide' | trans %}
+{% endif %}
+
+{% block section_title %}{{ widget_title }}{% endblock %}
+
+{% block action %}
+    <a href="{{ url('/tour-guide/tour') }}" class="btn btn-default">
+        Back to List
+    </a>
+{% endblock %}
+
+{% block content %}
+    {% embed '@Gui/Partials/widget.twig' %}
+        {% block widget_content %}
+            {{ form_start(tourGuideForm) }}
+            {{ form_widget(tourGuideForm) }}
+
+            <input type="submit" class="btn btn-primary safe-submit" value="{{ 'Save' | trans }}" />
+            {{ form_end(tourGuideForm) }}
+        {% endblock %}
+    {% endembed %}
+{% endblock %}

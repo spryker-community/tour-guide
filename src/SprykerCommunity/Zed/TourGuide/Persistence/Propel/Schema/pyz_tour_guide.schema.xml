@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<database xmlns="spryker:schema-01" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="zed" xsi:schemaLocation="spryker:schema-01 https://static.spryker.com/schema-01.xsd" namespace="Orm\Zed\TourGuide\Persistence" package="src.Orm.Zed.TourGuide.Persistence">
+    <table name="pyz_tour_guide" idMethod="native" phpName="PyzTourGuide">
+        <column name="id_tour_guide" required="true" type="INTEGER" autoIncrement="true" primaryKey="true"/>
+        <column name="fk_acl_group" required="false" type="INTEGER"/>
+        <column name="route" required="true" type="VARCHAR" size="255"/>
+        <column name="version" required="true" type="INTEGER" defaultValue="1"/>
+        <column name="is_active" required="true" type="BOOLEAN" defaultValue="true"/>
+
+        <foreign-key name="pyz_tour_guide-fk_acl_group" foreignTable="spy_acl_group" phpName="AclGroup" refPhpName="TourGuide">
+            <reference local="fk_acl_group" foreign="id_acl_group"/>
+        </foreign-key>
+
+        <id-method-parameter value="pyz_tour_guide_pk_seq"/>
+    </table>
+</database>

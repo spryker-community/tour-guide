@@ -1,0 +1,50 @@
+{
+  "name": "spryker-community/quest-2107-guided-tour-feature",
+  "type": "library",
+  "description": "Tour Guide - Guided Tour for Spryker Back Office",
+  "keywords": ["spryker"],
+  "homepage": "https://github.com/spryker-community/quest-2107-guided-tour-feature",
+  "require": {
+    "php": ">=8.2",
+    "spryker/kernel": "^3.52.0"
+  },
+  "require-dev": {
+    "mockery/mockery": "^1.5",
+    "phpstan/phpstan": "^2.1",
+    "phpunit/phpunit": "^10.0"
+  },
+  "autoload": {
+    "psr-4": {
+        "SprykerCommunity\\": "src/SprykerCommunity"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "SprykerCommunityTest\\": "tests/SprykerCommunityTest",
+      "Generated\\": "tests/_support/Stubs/Generated"
+    }
+  },
+  "authors": [
+    {
+      "name": "Sebastian Larisch",
+      "email": "kontakt@webcrab.de"
+    }
+  ],
+  "support": {
+    "issues": "https://github.com/spryker-community/quest-2107-guided-tour-feature/issues",
+    "source": "https://github.com/spryker-community/quest-2107-guided-tour-feature"
+  },
+  "config": {
+    "sort-packages": true,
+    "allow-plugins": {
+      "dealerdirect/phpcodesniffer-composer-installer": true
+    }
+  },
+  "scripts": {
+    "test": "vendor/bin/phpunit",
+    "test-unit": "vendor/bin/phpunit --testsuite=Unit"
+  },
+  "license": "MIT",
+  "minimum-stability": "dev",
+  "prefer-stable": true
+}
