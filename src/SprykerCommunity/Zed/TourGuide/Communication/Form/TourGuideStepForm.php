@@ -1,6 +1,11 @@
 <?php
 
-declare(strict_types=1);
+/**
+ * This file is part of the Spryker Commerce OS.
+ * For full license information, please view the LICENSE file that was distributed with this source code.
+ */
+
+declare(strict_types = 1);
 
 namespace SprykerCommunity\Zed\TourGuide\Communication\Form;
 
@@ -25,17 +30,27 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 class TourGuideStepForm extends AbstractType
 {
     public const FIELD_ID_TOUR_GUIDE_STEP = 'idTourGuideStep';
+
     public const FIELD_FK_TOUR_GUIDE = 'fkTourGuide';
+
     public const FIELD_STEP_INDEX = 'stepIndex';
+
     public const FIELD_TITLE = 'title';
+
     public const FIELD_TEXT = 'text';
+
     public const FIELD_ATTACH_TO_ELEMENT = 'attachToElement';
+
     public const FIELD_ATTACH_TO_POSITION = 'attachToPosition';
+
     public const FIELD_IS_ACTIVE = 'isActive';
 
     public const POSITION_TOP = 'top';
+
     public const POSITION_BOTTOM = 'bottom';
+
     public const POSITION_LEFT = 'left';
+
     public const POSITION_RIGHT = 'right';
 
     public function configureOptions(OptionsResolver $resolver): void
@@ -46,6 +61,8 @@ class TourGuideStepForm extends AbstractType
     }
 
     /**
+     * @phpcsSuppress SlevomatCodingStandard.Functions.UnusedParameter
+     *
      * @param array<string, mixed> $options
      */
     public function buildForm(FormBuilderInterface $builder, array $options): void
@@ -63,21 +80,21 @@ class TourGuideStepForm extends AbstractType
 
     protected function addIdTourGuideStepField(FormBuilderInterface $builder): self
     {
-        $builder->add(self::FIELD_ID_TOUR_GUIDE_STEP, HiddenType::class);
+        $builder->add(static::FIELD_ID_TOUR_GUIDE_STEP, HiddenType::class);
 
         return $this;
     }
 
     protected function addFkTourGuideField(FormBuilderInterface $builder): self
     {
-        $builder->add(self::FIELD_FK_TOUR_GUIDE, HiddenType::class);
+        $builder->add(static::FIELD_FK_TOUR_GUIDE, HiddenType::class);
 
         return $this;
     }
 
     protected function addStepIndexField(FormBuilderInterface $builder): self
     {
-        $builder->add(self::FIELD_STEP_INDEX, IntegerType::class, [
+        $builder->add(static::FIELD_STEP_INDEX, IntegerType::class, [
             'label' => 'Step Index',
             'constraints' => [
                 new NotBlank(),
@@ -90,7 +107,7 @@ class TourGuideStepForm extends AbstractType
 
     protected function addTitleField(FormBuilderInterface $builder): self
     {
-        $builder->add(self::FIELD_TITLE, TextType::class, [
+        $builder->add(static::FIELD_TITLE, TextType::class, [
             'label' => 'Title',
             'constraints' => [
                 new NotBlank(),
@@ -103,7 +120,7 @@ class TourGuideStepForm extends AbstractType
 
     protected function addTextField(FormBuilderInterface $builder): self
     {
-        $builder->add(self::FIELD_TEXT, TextareaType::class, [
+        $builder->add(static::FIELD_TEXT, TextareaType::class, [
             'label' => 'Text',
             'constraints' => [
                 new NotBlank(),
@@ -115,7 +132,7 @@ class TourGuideStepForm extends AbstractType
 
     protected function addAttachToElementField(FormBuilderInterface $builder): self
     {
-        $builder->add(self::FIELD_ATTACH_TO_ELEMENT, TextType::class, [
+        $builder->add(static::FIELD_ATTACH_TO_ELEMENT, TextType::class, [
             'label' => 'Attach To Element (CSS Selector)',
             'constraints' => [
                 new NotBlank(),
@@ -128,13 +145,13 @@ class TourGuideStepForm extends AbstractType
 
     protected function addAttachToPositionField(FormBuilderInterface $builder): self
     {
-        $builder->add(self::FIELD_ATTACH_TO_POSITION, ChoiceType::class, [
+        $builder->add(static::FIELD_ATTACH_TO_POSITION, ChoiceType::class, [
             'label' => 'Attach To Position',
             'choices' => [
-                'Top' => self::POSITION_TOP,
-                'Bottom' => self::POSITION_BOTTOM,
-                'Left' => self::POSITION_LEFT,
-                'Right' => self::POSITION_RIGHT,
+                'Top' => static::POSITION_TOP,
+                'Bottom' => static::POSITION_BOTTOM,
+                'Left' => static::POSITION_LEFT,
+                'Right' => static::POSITION_RIGHT,
             ],
             'constraints' => [
                 new NotBlank(),
@@ -146,7 +163,7 @@ class TourGuideStepForm extends AbstractType
 
     protected function addIsActiveField(FormBuilderInterface $builder): self
     {
-        $builder->add(self::FIELD_IS_ACTIVE, CheckboxType::class, [
+        $builder->add(static::FIELD_IS_ACTIVE, CheckboxType::class, [
             'label' => 'Is Active',
             'required' => false,
         ]);

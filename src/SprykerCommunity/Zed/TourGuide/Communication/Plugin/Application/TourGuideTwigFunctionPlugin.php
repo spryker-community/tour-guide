@@ -1,13 +1,18 @@
 <?php
 
-declare(strict_types=1);
+/**
+ * This file is part of the Spryker Commerce OS.
+ * For full license information, please view the LICENSE file that was distributed with this source code.
+ */
+
+declare(strict_types = 1);
 
 namespace SprykerCommunity\Zed\TourGuide\Communication\Plugin\Application;
 
 use Generated\Shared\Transfer\TourGuideStepCollectionTransfer;
 use Spryker\Service\Container\ContainerInterface;
-use Spryker\Zed\Kernel\Communication\AbstractPlugin;
 use Spryker\Shared\TwigExtension\Dependency\Plugin\TwigPluginInterface;
+use Spryker\Zed\Kernel\Communication\AbstractPlugin;
 use Twig\Environment;
 use Twig\TwigFunction;
 
@@ -17,7 +22,9 @@ use Twig\TwigFunction;
  */
 final class TourGuideTwigFunctionPlugin extends AbstractPlugin implements TwigPluginInterface
 {
-
+    /**
+     * @phpcsSuppress SlevomatCodingStandard.Functions.UnusedParameter
+     */
     public function extend(Environment $twig, ContainerInterface $container): Environment
     {
         $twig->addFunction($this->getRenderTourGuideAssetsFunction());
@@ -42,27 +49,27 @@ final class TourGuideTwigFunctionPlugin extends AbstractPlugin implements TwigPl
             }
 
             $tourGuideStepCollection = $this->getFacade()
-                ->getTourGuideStepsByTourGuideId($tourGuideTransfer->getIdTourGuide());
+            ->getTourGuideStepsByTourGuideId($tourGuideTransfer->getIdTourGuide());
 
             $steps = $this->normalizeTourSteps($tourGuideStepCollection);
 
             $currentUrl = $request->getSchemeAndHttpHost() . $request->getRequestUri();
             $requestData = [
-                'url' => $currentUrl,
-                'path' => $route,
-                'method' => $request->getMethod(),
-                'query' => $request->query->all(),
-                'headers' => $request->headers->all(),
+            'url' => $currentUrl,
+            'path' => $route,
+            'method' => $request->getMethod(),
+            'query' => $request->query->all(),
+            'headers' => $request->headers->all(),
             ];
 
             $encodedConfig = json_encode([
-                'route' => $route,
-                'version' => $tourGuideTransfer->getVersion(),
-                'steps' => $steps,
-                'defaultStepOptions' => [],
-                'currentUrl' => $currentUrl,
-                'currentPath' => $route,
-                'request' => $requestData,
+            'route' => $route,
+            'version' => $tourGuideTransfer->getVersion(),
+            'steps' => $steps,
+            'defaultStepOptions' => [],
+            'currentUrl' => $currentUrl,
+            'currentPath' => $route,
+            'request' => $requestData,
             ]);
 
             return sprintf(
@@ -78,7 +85,7 @@ final class TourGuideTwigFunctionPlugin extends AbstractPlugin implements TwigPl
                 '</script>',
                 $cssPath,
                 $jsPath,
-                $encodedConfig
+                $encodedConfig,
             );
         }, ['is_safe' => ['html']]);
     }
@@ -93,13 +100,13 @@ final class TourGuideTwigFunctionPlugin extends AbstractPlugin implements TwigPl
             }
 
             $step = [
-                'id' => $stepTransfer->getIdTourGuideStep(),
-                'title' => $stepTransfer->getTitle(),
-                'text' => $stepTransfer->getText(),
-                'attachTo' => [
-                    'element' => '.' . ltrim($stepTransfer->getAttachToElement(), '.'),
-                    'on' => $stepTransfer->getAttachToPosition(),
-                ],
+            'id' => $stepTransfer->getIdTourGuideStep(),
+            'title' => $stepTransfer->getTitle(),
+            'text' => $stepTransfer->getText(),
+            'attachTo' => [
+                'element' => '.' . ltrim($stepTransfer->getAttachToElement(), '.'),
+                'on' => $stepTransfer->getAttachToPosition(),
+            ],
             ];
 
             $steps[] = $step;

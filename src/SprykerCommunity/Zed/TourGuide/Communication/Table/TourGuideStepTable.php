@@ -1,15 +1,20 @@
 <?php
 
-declare(strict_types=1);
+/**
+ * This file is part of the Spryker Commerce OS.
+ * For full license information, please view the LICENSE file that was distributed with this source code.
+ */
+
+declare(strict_types = 1);
 
 namespace SprykerCommunity\Zed\TourGuide\Communication\Table;
 
 use Generated\Shared\Transfer\TourGuideStepCriteriaTransfer;
 use Orm\Zed\TourGuide\Persistence\Map\PyzTourGuideStepTableMap;
-use SprykerCommunity\Zed\TourGuide\Business\TourGuideFacadeInterface;
 use Spryker\Service\UtilText\Model\Url\Url;
 use Spryker\Zed\Gui\Communication\Table\AbstractTable;
 use Spryker\Zed\Gui\Communication\Table\TableConfiguration;
+use SprykerCommunity\Zed\TourGuide\Business\TourGuideFacadeInterface;
 
 class TourGuideStepTable extends AbstractTable
 {
@@ -32,7 +37,7 @@ class TourGuideStepTable extends AbstractTable
             PyzTourGuideStepTableMap::COL_STEP_INDEX => 'Index',
             PyzTourGuideStepTableMap::COL_TITLE => 'Title',
             PyzTourGuideStepTableMap::COL_IS_ACTIVE => 'Active',
-            self::COL_ACTIONS => 'Actions',
+            static::COL_ACTIONS => 'Actions',
         ]);
 
         $config->setSortable([
@@ -52,6 +57,9 @@ class TourGuideStepTable extends AbstractTable
         return $config;
     }
 
+    /**
+     * @phpcsSuppress SlevomatCodingStandard.Functions.UnusedParameter
+     */
     protected function prepareData(TableConfiguration $config): array
     {
         $tourGuideStepCriteriaTransfer = new TourGuideStepCriteriaTransfer();
@@ -63,7 +71,9 @@ class TourGuideStepTable extends AbstractTable
                 PyzTourGuideStepTableMap::COL_ID_TOUR_GUIDE_STEP => $tourGuideStepTransfer->getIdTourGuideStep(),
                 PyzTourGuideStepTableMap::COL_STEP_INDEX => $tourGuideStepTransfer->getStepIndex(),
                 PyzTourGuideStepTableMap::COL_TITLE => $tourGuideStepTransfer->getTitle(),
-                PyzTourGuideStepTableMap::COL_IS_ACTIVE => $this->generateStatusLabel($tourGuideStepTransfer->getIsActive()),
+                PyzTourGuideStepTableMap::COL_IS_ACTIVE => $this->generateStatusLabel(
+                    $tourGuideStepTransfer->getIsActive(),
+                ),
                 'Actions' => $this->generateActionButtons($tourGuideStepTransfer->getIdTourGuideStep()),
             ];
         }
@@ -74,9 +84,11 @@ class TourGuideStepTable extends AbstractTable
     protected function generateStatusLabel(bool $isActive): string
     {
         if ($isActive) {
-            return $this->generateLabel('Active', 'label-info');        }
+            return $this->generateLabel('Active', 'label-info');
+        }
 
-        return $this->generateLabel('Active', 'label-default');    }
+        return $this->generateLabel('Active', 'label-default');
+    }
 
     protected function generateActionButtons(int $idTourGuideStep): string
     {
@@ -84,12 +96,12 @@ class TourGuideStepTable extends AbstractTable
 
         $buttons[] = $this->generateEditButton(
             Url::generate('/tour-guide/steps/edit', ['id-tour-guide-step' => $idTourGuideStep]),
-            'Edit'
+            'Edit',
         );
 
         $buttons[] = $this->generateRemoveButton(
             Url::generate('/tour-guide/steps/delete', ['id-tour-guide-step' => $idTourGuideStep]),
-            'Delete'
+            'Delete',
         );
 
         return implode(' ', $buttons);

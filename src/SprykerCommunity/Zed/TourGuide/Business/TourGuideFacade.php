@@ -1,16 +1,21 @@
 <?php
 
-declare(strict_types=1);
+/**
+ * This file is part of the Spryker Commerce OS.
+ * For full license information, please view the LICENSE file that was distributed with this source code.
+ */
+
+declare(strict_types = 1);
 
 namespace SprykerCommunity\Zed\TourGuide\Business;
 
+use Generated\Shared\Transfer\RouteValidationRequestTransfer;
 use Generated\Shared\Transfer\TourGuideCollectionTransfer;
 use Generated\Shared\Transfer\TourGuideCriteriaTransfer;
 use Generated\Shared\Transfer\TourGuideStepCollectionTransfer;
 use Generated\Shared\Transfer\TourGuideStepCriteriaTransfer;
 use Generated\Shared\Transfer\TourGuideStepTransfer;
 use Generated\Shared\Transfer\TourGuideTransfer;
-use Generated\Shared\Transfer\RouteValidationRequestTransfer;
 use Spryker\Zed\Kernel\Business\AbstractFacade;
 
 /**
@@ -24,7 +29,7 @@ final class TourGuideFacade extends AbstractFacade implements TourGuideFacadeInt
      * @api
      */
     public function getTourGuideStepCollection(
-        TourGuideStepCriteriaTransfer $tourGuideStepCriteriaTransfer
+        TourGuideStepCriteriaTransfer $tourGuideStepCriteriaTransfer,
     ): TourGuideStepCollectionTransfer {
         return $this->getFactory()
             ->createTourGuideReader()
@@ -118,7 +123,7 @@ final class TourGuideFacade extends AbstractFacade implements TourGuideFacadeInt
      * @api
      */
     public function getTourGuideCollection(
-        TourGuideCriteriaTransfer $tourGuideCriteriaTransfer
+        TourGuideCriteriaTransfer $tourGuideCriteriaTransfer,
     ): TourGuideCollectionTransfer {
         return $this->getFactory()
             ->createTourGuideReader()

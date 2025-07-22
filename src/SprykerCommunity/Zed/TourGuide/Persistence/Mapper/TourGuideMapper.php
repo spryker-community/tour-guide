@@ -1,6 +1,11 @@
 <?php
 
-declare(strict_types=1);
+/**
+ * This file is part of the Spryker Commerce OS.
+ * For full license information, please view the LICENSE file that was distributed with this source code.
+ */
+
+declare(strict_types = 1);
 
 namespace SprykerCommunity\Zed\TourGuide\Persistence\Mapper;
 
@@ -12,7 +17,7 @@ class TourGuideMapper
 {
     public function mapTourGuideEntityToTourGuideTransfer(
         PyzTourGuide $tourGuideEntity,
-        TourGuideTransfer $tourGuideTransfer
+        TourGuideTransfer $tourGuideTransfer,
     ): TourGuideTransfer {
         $tourGuideTransfer = $tourGuideTransfer->fromArray($tourGuideEntity->toArray(), true);
 
@@ -26,7 +31,7 @@ class TourGuideMapper
 
     public function mapTourGuideTransferToTourGuideEntity(
         TourGuideTransfer $tourGuideTransfer,
-        PyzTourGuide $tourGuideEntity
+        PyzTourGuide $tourGuideEntity,
     ): PyzTourGuide {
         $tourGuideEntity->fromArray($tourGuideTransfer->toArray());
 

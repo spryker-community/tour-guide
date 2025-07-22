@@ -1,19 +1,24 @@
 <?php
 
-declare(strict_types=1);
+/**
+ * This file is part of the Spryker Commerce OS.
+ * For full license information, please view the LICENSE file that was distributed with this source code.
+ */
+
+declare(strict_types = 1);
 
 namespace SprykerCommunity\Zed\TourGuide\Business;
 
-use SprykerCommunity\Zed\TourGuide\Business\Reader\TourGuideReaderInterface;
-use SprykerCommunity\Zed\TourGuide\Business\Reader\TourGuideReader;
-use SprykerCommunity\Zed\TourGuide\Business\Validator\RouteValidator;
-use SprykerCommunity\Zed\TourGuide\Business\Validator\RouteValidatorInterface;
-use SprykerCommunity\Zed\TourGuide\Business\Writer\TourGuideWriterInterface;
-use SprykerCommunity\Zed\TourGuide\Business\Writer\TourGuideWriter;
+use Spryker\Zed\Kernel\Business\AbstractBusinessFactory;
 use SprykerCommunity\Zed\TourGuide\Business\Collector\ZedRouteCollector;
 use SprykerCommunity\Zed\TourGuide\Business\Collector\ZedRouteCollectorInterface;
+use SprykerCommunity\Zed\TourGuide\Business\Reader\TourGuideReader;
+use SprykerCommunity\Zed\TourGuide\Business\Reader\TourGuideReaderInterface;
+use SprykerCommunity\Zed\TourGuide\Business\Validator\RouteValidator;
+use SprykerCommunity\Zed\TourGuide\Business\Validator\RouteValidatorInterface;
+use SprykerCommunity\Zed\TourGuide\Business\Writer\TourGuideWriter;
+use SprykerCommunity\Zed\TourGuide\Business\Writer\TourGuideWriterInterface;
 use SprykerCommunity\Zed\TourGuide\TourGuideDependencyProvider;
-use Spryker\Zed\Kernel\Business\AbstractBusinessFactory;
 use Symfony\Component\Routing\RouterInterface;
 
 /**
@@ -25,7 +30,7 @@ final class TourGuideBusinessFactory extends AbstractBusinessFactory
     public function createTourGuideReader(): TourGuideReaderInterface
     {
         return new TourGuideReader(
-            $this->getRepository()
+            $this->getRepository(),
         );
     }
 
@@ -33,21 +38,21 @@ final class TourGuideBusinessFactory extends AbstractBusinessFactory
     {
         return new TourGuideWriter(
             $this->getEntityManager(),
-            $this->getRepository()
+            $this->getRepository(),
         );
     }
 
     public function createRouteValidator(): RouteValidatorInterface
     {
         return new RouteValidator(
-            $this->createZedRouteCollector()
+            $this->createZedRouteCollector(),
         );
     }
 
     public function createZedRouteCollector(): ZedRouteCollectorInterface
     {
         return new ZedRouteCollector(
-            $this->getRouter()
+            $this->getRouter(),
         );
     }
 

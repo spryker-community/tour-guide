@@ -1,12 +1,16 @@
 <?php
 
-declare(strict_types=1);
+/**
+ * This file is part of the Spryker Commerce OS.
+ * For full license information, please view the LICENSE file that was distributed with this source code.
+ */
+
+declare(strict_types = 1);
 
 namespace SprykerCommunity\Zed\TourGuide\Communication\Form;
 
-use Generated\Shared\Transfer\TourGuideTransfer;
 use Generated\Shared\Transfer\RouteValidationRequestTransfer;
-use SprykerCommunity\Zed\TourGuide\Business\TourGuideFacadeInterface;
+use Generated\Shared\Transfer\TourGuideTransfer;
 use Spryker\Zed\Kernel\Communication\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -68,6 +72,8 @@ class TourGuideForm extends AbstractType
     }
 
     /**
+     * @phpcsSuppress SlevomatCodingStandard.Functions.UnusedParameter
+     *
      * @param array<string, mixed> $options
      */
     public function buildForm(FormBuilderInterface $builder, array $options): void
@@ -157,7 +163,7 @@ class TourGuideForm extends AbstractType
 
     public function validateZedRoute(?string $value, ExecutionContextInterface $context): void
     {
-        if (empty($value)) {
+        if (!$value) {
             return;
         }
 
@@ -165,10 +171,12 @@ class TourGuideForm extends AbstractType
             ->setRoute($value)
             ->setValidRoutes($this->getFacade()->getAllZedUrls());
 
-        if (!$this->getFacade()->validateZedUrl($validationRequestTransfer)) {
-            $context->buildViolation('The route "{{ value }}" is not a valid ZED backoffice URL.')
-                ->setParameter('{{ value }}', $value)
-                ->addViolation();
+        if ($this->getFacade()->validateZedUrl($validationRequestTransfer)) {
+            return;
         }
+
+        $context->buildViolation('The route "{{ value }}" is not a valid ZED backoffice URL.')
+            ->setParameter('{{ value }}', $value)
+            ->addViolation();
     }
 }

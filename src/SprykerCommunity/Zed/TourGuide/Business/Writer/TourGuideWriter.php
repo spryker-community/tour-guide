@@ -1,6 +1,11 @@
 <?php
 
-declare(strict_types=1);
+/**
+ * This file is part of the Spryker Commerce OS.
+ * For full license information, please view the LICENSE file that was distributed with this source code.
+ */
+
+declare(strict_types = 1);
 
 namespace SprykerCommunity\Zed\TourGuide\Business\Writer;
 
@@ -17,7 +22,7 @@ class TourGuideWriter implements TourGuideWriterInterface
 
     public function __construct(
         TourGuideEntityManagerInterface $tourGuideEntityManager,
-        TourGuideRepositoryInterface $tourGuideRepository
+        TourGuideRepositoryInterface $tourGuideRepository,
     ) {
         $this->tourGuideEntityManager = $tourGuideEntityManager;
         $this->tourGuideRepository = $tourGuideRepository;
@@ -31,7 +36,7 @@ class TourGuideWriter implements TourGuideWriterInterface
     public function updateTourGuideStep(TourGuideStepTransfer $tourGuideStepTransfer): TourGuideStepTransfer
     {
         $existingTourGuideStepTransfer = $this->tourGuideRepository->findTourGuideStepById(
-            (int)$tourGuideStepTransfer->getIdTourGuideStep()
+            (int)$tourGuideStepTransfer->getIdTourGuideStep(),
         );
 
         if ($existingTourGuideStepTransfer === null) {
@@ -54,7 +59,7 @@ class TourGuideWriter implements TourGuideWriterInterface
     public function updateTourGuide(TourGuideTransfer $tourGuideTransfer): TourGuideTransfer
     {
         $existingTourGuideTransfer = $this->tourGuideRepository->findTourGuideById(
-            (int)$tourGuideTransfer->getIdTourGuide()
+            (int)$tourGuideTransfer->getIdTourGuide(),
         );
 
         if ($existingTourGuideTransfer === null) {

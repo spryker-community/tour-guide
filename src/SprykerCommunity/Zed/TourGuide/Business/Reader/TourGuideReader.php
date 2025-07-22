@@ -1,6 +1,11 @@
 <?php
 
-declare(strict_types=1);
+/**
+ * This file is part of the Spryker Commerce OS.
+ * For full license information, please view the LICENSE file that was distributed with this source code.
+ */
+
+declare(strict_types = 1);
 
 namespace SprykerCommunity\Zed\TourGuide\Business\Reader;
 
@@ -22,7 +27,7 @@ class TourGuideReader implements TourGuideReaderInterface
     }
 
     public function getTourGuideCollection(
-        TourGuideCriteriaTransfer $tourGuideCriteriaTransfer
+        TourGuideCriteriaTransfer $tourGuideCriteriaTransfer,
     ): TourGuideCollectionTransfer {
         return $this->tourGuideRepository->getTourGuideCollection($tourGuideCriteriaTransfer);
     }
@@ -38,7 +43,7 @@ class TourGuideReader implements TourGuideReaderInterface
     }
 
     public function getTourGuideStepCollection(
-        TourGuideStepCriteriaTransfer $tourGuideStepCriteriaTransfer
+        TourGuideStepCriteriaTransfer $tourGuideStepCriteriaTransfer,
     ): TourGuideStepCollectionTransfer {
         return $this->tourGuideRepository->getTourGuideStepCollection($tourGuideStepCriteriaTransfer);
     }

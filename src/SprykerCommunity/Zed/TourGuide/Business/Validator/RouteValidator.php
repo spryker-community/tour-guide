@@ -1,6 +1,11 @@
 <?php
 
-declare(strict_types=1);
+/**
+ * This file is part of the Spryker Commerce OS.
+ * For full license information, please view the LICENSE file that was distributed with this source code.
+ */
+
+declare(strict_types = 1);
 
 namespace SprykerCommunity\Zed\TourGuide\Business\Validator;
 
@@ -10,7 +15,7 @@ use SprykerCommunity\Zed\TourGuide\Business\Collector\ZedRouteCollectorInterface
 class RouteValidator implements RouteValidatorInterface
 {
     public function __construct(
-        protected ZedRouteCollectorInterface $zedRouteCollector
+        protected ZedRouteCollectorInterface $zedRouteCollector,
     ) {
     }
 

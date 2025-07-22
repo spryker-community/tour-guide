@@ -1,6 +1,11 @@
 <?php
 
-declare(strict_types=1);
+/**
+ * This file is part of the Spryker Commerce OS.
+ * For full license information, please view the LICENSE file that was distributed with this source code.
+ */
+
+declare(strict_types = 1);
 
 namespace SprykerCommunity\Zed\TourGuide\Communication\Form\Constraint;
 
@@ -13,7 +18,7 @@ use Symfony\Component\Validator\Exception\UnexpectedTypeException;
 class ValidZedRouteValidator extends ConstraintValidator
 {
     public function __construct(
-        protected TourGuideFacadeInterface $tourGuideFacade
+        protected TourGuideFacadeInterface $tourGuideFacade,
     ) {
     }
 
@@ -23,7 +28,7 @@ class ValidZedRouteValidator extends ConstraintValidator
             throw new UnexpectedTypeException($constraint, ValidZedRoute::class);
         }
 
-        if (null === $value || '' === $value) {
+        if ($value === null || $value === '') {
             return;
         }
 
@@ -33,10 +38,12 @@ class ValidZedRouteValidator extends ConstraintValidator
 
         $isValid = $this->tourGuideFacade->validateZedUrl($validationRequestTransfer);
 
-        if (!$isValid) {
-            $this->context->buildViolation($constraint::MESSAGE)
-                ->setParameter('{{ value }}', $value)
-                ->addViolation();
+        if ($isValid) {
+            return;
         }
+
+        $this->context->buildViolation($constraint::MESSAGE)
+            ->setParameter('{{ value }}', $value)
+            ->addViolation();
     }
 }

@@ -1,14 +1,19 @@
 <?php
 
-declare(strict_types=1);
+/**
+ * This file is part of the Spryker Commerce OS.
+ * For full license information, please view the LICENSE file that was distributed with this source code.
+ */
+
+declare(strict_types = 1);
 
 namespace SprykerCommunity\Zed\TourGuide\Communication\Table;
 
 use Generated\Shared\Transfer\TourGuideCriteriaTransfer;
-use SprykerCommunity\Zed\TourGuide\Business\TourGuideFacadeInterface;
 use Spryker\Service\UtilText\Model\Url\Url;
 use Spryker\Zed\Gui\Communication\Table\AbstractTable;
 use Spryker\Zed\Gui\Communication\Table\TableConfiguration;
+use SprykerCommunity\Zed\TourGuide\Business\TourGuideFacadeInterface;
 
 class TourGuideTable extends AbstractTable
 {
@@ -38,7 +43,7 @@ class TourGuideTable extends AbstractTable
     protected const COL_ACTIONS = 'actions';
 
     public function __construct(
-        protected TourGuideFacadeInterface $tourGuideFacade
+        protected TourGuideFacadeInterface $tourGuideFacade,
     ) {
     }
 
@@ -71,6 +76,9 @@ class TourGuideTable extends AbstractTable
         return $config;
     }
 
+    /**
+     * @phpcsSuppress SlevomatCodingStandard.Functions.UnusedParameter
+     */
     protected function prepareData(TableConfiguration $config): array
     {
         $tourGuideCollectionTransfer = $this->tourGuideFacade->getTourGuideCollection(new TourGuideCriteriaTransfer());
@@ -106,21 +114,21 @@ class TourGuideTable extends AbstractTable
             Url::generate('/tour-guide/tour/edit', [
                 'id-tour-guide' => $idTourGuide,
             ]),
-            'Edit Tour'
+            'Edit Tour',
         );
 
         $buttons[] = $this->generateRemoveButton(
             Url::generate('/tour-guide/tour/delete', [
                 'id-tour-guide' => $idTourGuide,
             ]),
-            'Delete Tour'
+            'Delete Tour',
         );
 
         $buttons[] = $this->generateViewButton(
             Url::generate('/tour-guide/steps', [
                 'id-tour-guide' => $idTourGuide,
             ]),
-            'Edit Steps'
+            'Edit Steps',
         );
 
         return implode(' ', $buttons);

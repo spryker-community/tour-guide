@@ -1,6 +1,11 @@
 <?php
 
-declare(strict_types=1);
+/**
+ * This file is part of the Spryker Commerce OS.
+ * For full license information, please view the LICENSE file that was distributed with this source code.
+ */
+
+declare(strict_types = 1);
 
 namespace SprykerCommunityTest\Zed\TourGuide\Business\Collector;
 
@@ -12,7 +17,7 @@ use Symfony\Component\Routing\RouterInterface;
 
 final class ZedRouteCollectorTest extends TestCase
 {
-    public function test_get_all_zed_routes_returns_routes_without_parameters(): void
+    public function testGetAllZedRoutesReturnsRoutesWithoutParameters(): void
     {
         // Arrange
         $routeCollection = new RouteCollection();
