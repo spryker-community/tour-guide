@@ -7,9 +7,13 @@
         <column name="version" required="true" type="INTEGER" defaultValue="1"/>
         <column name="is_active" required="true" type="BOOLEAN" defaultValue="true"/>
 
-        <foreign-key name="pyz_tour_guide-fk_acl_group" foreignTable="spy_acl_group" phpName="AclGroup" refPhpName="TourGuide">
+        <foreign-key name="pyz_tour_guide-fk_acl_group" foreignTable="spy_acl_group" phpName="AclGroup" refPhpName="TourGuide" onDelete="cascade">
             <reference local="fk_acl_group" foreign="id_acl_group"/>
         </foreign-key>
+
+        <unique>
+            <unique-column name="route"/>
+        </unique>
 
         <id-method-parameter value="pyz_tour_guide_pk_seq"/>
     </table>

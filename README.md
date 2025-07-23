@@ -45,8 +45,8 @@ $config[KernelConstants::CORE_NAMESPACES] = [
 2. Run the following console commands inside the `docker/sdk cli` to update caches:
 
 ```bash
-console transfer:generate
-console cache:empty-all
+vendor/bin/console transfer:generate
+vendor/bin/console cache:empty-all
 ```
 
 ### 3. Install Frontend Assets
@@ -116,7 +116,17 @@ console propel:install
 
 Add `TourGuideTwigFunctionPlugin` to your `TwigDependencyProvider`,
 
-### 6. Add navigation entry
+### 6. Call Twig function to ZED template
+
+Override `src/Pyz/Zed/Gui/Presentation/Layout/layout.twig` on project level or choose a specific template of any module and add:
+
+```
+{{ renderTourGuideAssets() }}
+```
+
+Run `vendor/bin/console twig:cache:warmer` afterward.
+
+### 7. Add navigation entry
 
 To have a separate navigation menu for the new Tour Guide, copy the content from `src/SprykerCommunity/Zed/Communication/navigation.xml` into your `config/Zed/navigation.xml`.
 

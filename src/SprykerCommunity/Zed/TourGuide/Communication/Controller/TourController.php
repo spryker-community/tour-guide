@@ -9,6 +9,7 @@ declare(strict_types = 1);
 
 namespace SprykerCommunity\Zed\TourGuide\Communication\Controller;
 
+use Exception;
 use Generated\Shared\Transfer\TourGuideTransfer;
 use Spryker\Zed\Kernel\Communication\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -55,7 +56,14 @@ class TourController extends AbstractController
         if ($tourGuideForm->isSubmitted() && $tourGuideForm->isValid()) {
             /** @var \Generated\Shared\Transfer\TourGuideTransfer $tourGuideTransfer */
             $tourGuideTransfer = $tourGuideForm->getData();
-            $this->getFacade()->createTourGuide($tourGuideTransfer);
+
+            try {
+                $this->getFacade()->createTourGuide($tourGuideTransfer);
+            } catch (Exception $e) {
+                $this->addErrorMessage($e->getMessage());
+
+                return $this->redirectResponse('/tour-guide/tour');
+            }
 
             $this->addSuccessMessage('Tour guide created successfully.');
 
