@@ -51,6 +51,8 @@ class TourGuideEntityManager extends AbstractEntityManager implements TourGuideE
             return false;
         }
 
+        $this->deleteTourRelations($idTourGuide);
+
         $tourGuideEntity->delete();
 
         return true;
@@ -104,5 +106,13 @@ class TourGuideEntityManager extends AbstractEntityManager implements TourGuideE
         return $this->getFactory()
             ->createTourGuideStepQuery()
             ->findOneByIdTourGuideStep($idTourGuideStep);
+    }
+
+    private function deleteTourRelations(int $idTourGuide): void
+    {
+        $this->getFactory()
+            ->createTourGuideStepQuery()
+            ->filterByFkTourGuide($idTourGuide)
+            ->delete();
     }
 }

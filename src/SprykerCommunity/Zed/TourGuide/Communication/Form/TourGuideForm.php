@@ -9,21 +9,17 @@ declare(strict_types = 1);
 
 namespace SprykerCommunity\Zed\TourGuide\Communication\Form;
 
-use Generated\Shared\Transfer\RouteValidationRequestTransfer;
 use Generated\Shared\Transfer\TourGuideTransfer;
 use Spryker\Zed\Kernel\Communication\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Validator\Constraints\Callback;
 use Symfony\Component\Validator\Constraints\GreaterThanOrEqual;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
-use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 /**
  * @method \SprykerCommunity\Zed\TourGuide\Business\TourGuideFacadeInterface getFacade()
@@ -122,15 +118,17 @@ class TourGuideForm extends AbstractType
 
     protected function addRouteField(FormBuilderInterface $builder): self
     {
-        $builder->add(static::FIELD_ROUTE, TextType::class, [
+        $zedUrls = $this->getFacade()->getAllZedUrls();
+        $choices = array_combine($zedUrls, $zedUrls);
+
+        $builder->add(static::FIELD_ROUTE, ChoiceType::class, [
             'label' => 'Route',
             'required' => true,
+            'choices' => $choices,
+            'placeholder' => 'Select a route',
             'constraints' => [
                 new NotBlank(),
                 new Length(['max' => 255]),
-                new Callback([
-                    'callback' => [$this, 'validateZedRoute'],
-                ]),
             ],
         ]);
 
@@ -159,24 +157,5 @@ class TourGuideForm extends AbstractType
         ]);
 
         return $this;
-    }
-
-    public function validateZedRoute(?string $value, ExecutionContextInterface $context): void
-    {
-        if (!$value) {
-            return;
-        }
-
-        $validationRequestTransfer = (new RouteValidationRequestTransfer())
-            ->setRoute($value)
-            ->setValidRoutes($this->getFacade()->getAllZedUrls());
-
-        if ($this->getFacade()->validateZedUrl($validationRequestTransfer)) {
-            return;
-        }
-
-        $context->buildViolation('The route "{{ value }}" is not a valid ZED backoffice URL.')
-            ->setParameter('{{ value }}', $value)
-            ->addViolation();
     }
 }
