@@ -8,6 +8,7 @@
         <property name="version" type="int"/>
         <property name="isActive" type="bool"/>
         <property name="tourGuideSteps" type="TourGuideStep[]" singular="tourGuideStep"/>
+        <property name="tourGuideEvents" type="TourGuideEvent[]" singular="tourGuideEvent"/>
     </transfer>
 
     <transfer name="TourGuideCollection">
@@ -41,6 +42,25 @@
         <property name="idTourGuideStep" type="int"/>
         <property name="fkTourGuide" type="int"/>
         <property name="isActive" type="bool"/>
+    </transfer>
+
+    <transfer name="TourGuideEvent">
+        <property name="idTourGuideEvent" type="int"/>
+        <property name="fkTourGuide" type="int"/>
+        <property name="tourGuide" type="TourGuide"/>
+        <property name="eventType" type="string"/>
+        <property name="tourVersion" type="int"/>
+        <property name="createdAt" type="string"/>
+    </transfer>
+
+    <transfer name="TourGuideEventCollection">
+        <property name="tourGuideEvents" type="TourGuideEvent[]" singular="tourGuideEvent"/>
+    </transfer>
+
+    <transfer name="TourGuideEventCriteria">
+        <property name="idTourGuideEvent" type="int"/>
+        <property name="fkTourGuide" type="int"/>
+        <property name="eventType" type="string"/>
     </transfer>
 
     <transfer name="TourGuideButton">

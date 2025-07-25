@@ -12,6 +12,7 @@ namespace SprykerCommunity\Zed\TourGuide\Business;
 use Generated\Shared\Transfer\RouteValidationRequestTransfer;
 use Generated\Shared\Transfer\TourGuideCollectionTransfer;
 use Generated\Shared\Transfer\TourGuideCriteriaTransfer;
+use Generated\Shared\Transfer\TourGuideEventTransfer;
 use Generated\Shared\Transfer\TourGuideStepCollectionTransfer;
 use Generated\Shared\Transfer\TourGuideStepCriteriaTransfer;
 use Generated\Shared\Transfer\TourGuideStepTransfer;
@@ -200,5 +201,39 @@ final class TourGuideFacade extends AbstractFacade implements TourGuideFacadeInt
         return $this->getFactory()
             ->createTourGuideReader()
             ->getTourGuideStepsByTourGuideId($idTourGuide);
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @api
+     *
+     * @param \Generated\Shared\Transfer\TourGuideEventTransfer $tourGuideEventTransfer
+     *
+     * @return \Generated\Shared\Transfer\TourGuideEventTransfer
+     */
+    public function createTourGuideEvent(TourGuideEventTransfer $tourGuideEventTransfer): TourGuideEventTransfer
+    {
+        return $this->getFactory()
+            ->createTourGuideEventWriter()
+            ->createTourGuideEvent($tourGuideEventTransfer);
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @api
+     *
+     * @param int $idTourGuide
+     * @param string $eventType
+     * @param int $tourVersion
+     *
+     * @return \Generated\Shared\Transfer\TourGuideEventTransfer
+     */
+    public function trackTourGuideEvent(int $idTourGuide, string $eventType, int $tourVersion): TourGuideEventTransfer
+    {
+        return $this->getFactory()
+            ->createTourGuideEventWriter()
+            ->trackTourGuideEvent($idTourGuide, $eventType, $tourVersion);
     }
 }

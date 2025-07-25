@@ -20,6 +20,31 @@ async function loadTourConfig(route) {
     }
 }
 
+// Function to track tour events with the backend
+async function trackTourEvent(idTourGuide, eventType, tourVersion) {
+    try {
+        const response = await fetch(`/tour-guide/event/${eventType}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: new URLSearchParams({
+                idTourGuide: idTourGuide,
+                tourVersion: tourVersion
+            })
+        });
+
+        if (!response.ok) {
+            console.error(`Error tracking tour ${eventType} event:`, response.statusText);
+        }
+
+        return response.ok;
+    } catch (e) {
+        console.error(`Error tracking tour ${eventType} event:`, e);
+        return false;
+    }
+}
+
 // Function to create and add pause button to the tour footer
 function createPauseButton(tour, route, version) {
     // Add styles to the document
@@ -53,6 +78,10 @@ function createPauseButton(tour, route, version) {
                         const currentStepIndex = tour.getCurrentStep().id;
                         // Save the current step index to localStorage
                         localStorage.setItem(`tourPaused_${route}_v${version}`, currentStepIndex);
+                        // Track pause event with the backend
+                        if (window.tourConfig && window.tourConfig.idTourGuide) {
+                            trackTourEvent(window.tourConfig.idTourGuide, 'pause', version);
+                        }
                         // Hide the tour
                         tour.hide();
                     });
@@ -146,17 +175,33 @@ export async function initTourGuide(input = 'default') {
         localStorage.setItem(storageKey, 'true');
         // Also remove any paused state when tour is completed
         localStorage.removeItem(`tourPaused_${route}_v${version}`);
+        // Track finish event with the backend
+        if (window.tourConfig && window.tourConfig.idTourGuide) {
+            trackTourEvent(window.tourConfig.idTourGuide, 'finish', version);
+        }
     });
 
     tour.on('cancel', () => {
         localStorage.setItem(storageKey, 'true');
         // Also remove any paused state when tour is cancelled
         localStorage.removeItem(`tourPaused_${route}_v${version}`);
+        // Track finish event with the backend (cancelling is also considered finishing)
+        if (window.tourConfig && window.tourConfig.idTourGuide) {
+            trackTourEvent(window.tourConfig.idTourGuide, 'finish', version);
+        }
     });
 
     // Add event listener for tour start to create the pause button
     tour.on('start', () => {
         createPauseButton(tour, route, version);
+        // Track start event with the backend
+
+        console.log(window.tourConfig)
+        console.log(window.tourConfig.idTourGuide)
+
+        if (window.tourConfig && window.tourConfig.idTourGuide) {
+            trackTourEvent(window.tourConfig.idTourGuide, 'start', version);
+        }
     });
 
     window.shepherdTour = tour;

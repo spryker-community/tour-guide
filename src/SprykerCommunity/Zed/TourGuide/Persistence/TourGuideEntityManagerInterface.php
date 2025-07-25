@@ -9,6 +9,7 @@ declare(strict_types = 1);
 
 namespace SprykerCommunity\Zed\TourGuide\Persistence;
 
+use Generated\Shared\Transfer\TourGuideEventTransfer;
 use Generated\Shared\Transfer\TourGuideStepTransfer;
 use Generated\Shared\Transfer\TourGuideTransfer;
 
@@ -21,4 +22,8 @@ interface TourGuideEntityManagerInterface
     public function saveTourGuideStep(TourGuideStepTransfer $tourGuideStepTransfer): TourGuideStepTransfer;
 
     public function deleteTourGuideStep(int $idTourGuideStep): bool;
+
+    public function saveTourGuideEvent(TourGuideEventTransfer $tourGuideEventTransfer): TourGuideEventTransfer;
+
+    public function deleteTourGuideEvent(int $idTourGuideEvent): bool;
 }

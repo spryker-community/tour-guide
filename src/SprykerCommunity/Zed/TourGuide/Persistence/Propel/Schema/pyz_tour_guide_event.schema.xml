@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<database xmlns="spryker:schema-01" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="zed" xsi:schemaLocation="spryker:schema-01 https://static.spryker.com/schema-01.xsd" namespace="Orm\Zed\TourGuide\Persistence" package="src.Orm.Zed.TourGuide.Persistence">
+    <table name="pyz_tour_guide_event" idMethod="native" phpName="PyzTourGuideEvent">
+        <column name="id_tour_guide_event" required="true" type="INTEGER" autoIncrement="true" primaryKey="true"/>
+        <column name="fk_tour_guide" required="true" type="INTEGER"/>
+        <column name="event_type" required="true" type="ENUM" valueSet="start, pause, finish"/>
+        <column name="tour_version" required="true" type="INTEGER"/>
+        <column name="created_at" required="true" type="TIMESTAMP" defaultExpr="CURRENT_TIMESTAMP"/>
+
+        <foreign-key name="pyz_tour_guide_event-fk_tour_guide" foreignTable="pyz_tour_guide" phpName="PyzTourGuide" refPhpName="PyzTourGuideEvent">
+            <reference local="fk_tour_guide" foreign="id_tour_guide"/>
+        </foreign-key>
+
+        <id-method-parameter value="pyz_tour_guide_event_pk_seq"/>
+    </table>
+</database>

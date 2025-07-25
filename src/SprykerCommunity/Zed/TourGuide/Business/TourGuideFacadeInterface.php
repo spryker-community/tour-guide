@@ -11,6 +11,7 @@ namespace SprykerCommunity\Zed\TourGuide\Business;
 
 use Generated\Shared\Transfer\TourGuideCollectionTransfer;
 use Generated\Shared\Transfer\TourGuideCriteriaTransfer;
+use Generated\Shared\Transfer\TourGuideEventTransfer;
 use Generated\Shared\Transfer\TourGuideStepCollectionTransfer;
 use Generated\Shared\Transfer\TourGuideStepCriteriaTransfer;
 use Generated\Shared\Transfer\TourGuideStepTransfer;
@@ -120,4 +121,31 @@ interface TourGuideFacadeInterface
      * - Returns true if the step was deleted, false otherwise.
      */
     public function deleteTourGuideStep(int $idTourGuideStep): bool;
+
+    /**
+     * Specification:
+     * - Creates a new tour guide event.
+     * - Persists the event to the database.
+     * - Returns the created tour guide event with the ID set.
+     *
+     * @param \Generated\Shared\Transfer\TourGuideEventTransfer $tourGuideEventTransfer
+     *
+     * @return \Generated\Shared\Transfer\TourGuideEventTransfer
+     */
+    public function createTourGuideEvent(TourGuideEventTransfer $tourGuideEventTransfer): TourGuideEventTransfer;
+
+    /**
+     * Specification:
+     * - Tracks a tour guide event with the given tour guide ID, event type, and tour version.
+     * - Creates a new tour guide event.
+     * - Persists the event to the database.
+     * - Returns the created tour guide event with the ID set.
+     *
+     * @param int $idTourGuide
+     * @param string $eventType
+     * @param int $tourVersion
+     *
+     * @return \Generated\Shared\Transfer\TourGuideEventTransfer
+     */
+    public function trackTourGuideEvent(int $idTourGuide, string $eventType, int $tourVersion): TourGuideEventTransfer;
 }

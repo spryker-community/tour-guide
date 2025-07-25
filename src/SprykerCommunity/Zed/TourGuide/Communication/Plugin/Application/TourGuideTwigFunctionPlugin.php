@@ -63,6 +63,7 @@ final class TourGuideTwigFunctionPlugin extends AbstractPlugin implements TwigPl
             ];
 
             $encodedConfig = json_encode([
+                'idTourGuide' => $tourGuideTransfer->getIdTourGuide(),
                 'route' => $route,
                 'version' => $tourGuideTransfer->getVersion(),
                 'steps' => $steps,
