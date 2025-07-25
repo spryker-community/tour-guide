@@ -65,7 +65,7 @@ class TourController extends AbstractController
                 return $this->redirectResponse('/tour-guide/tour');
             }
 
-            $this->addSuccessMessage('Tour guide created successfully.');
+            $this->addSuccessMessage(sprintf('Tour for route %s created successfully.', $tourGuideTransfer->getRoute()));
 
             return $this->redirectResponse('/tour-guide/tour');
         }
@@ -114,12 +114,12 @@ class TourController extends AbstractController
     {
         $idTourGuide = $this->castId($request->query->get('id-tour-guide'));
 
-        $result = $this->getFacade()->deleteTourGuide($idTourGuide);
+        $isDeleted = $this->getFacade()->deleteTourGuide($idTourGuide);
 
-        if ($result) {
-            $this->addSuccessMessage('Tour guide deleted successfully.');
+        if ($isDeleted) {
+            $this->addSuccessMessage('Tour deleted successfully.');
         } else {
-            $this->addErrorMessage('Tour guide could not be deleted.');
+            $this->addErrorMessage('Tour could not be deleted.');
         }
 
         return $this->redirectResponse('/tour-guide/tour');
