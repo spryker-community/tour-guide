@@ -9,6 +9,7 @@ declare(strict_types = 1);
 
 namespace SprykerCommunity\Zed\TourGuide\Persistence;
 
+use Exception;
 use Generated\Shared\Transfer\TourGuideStepTransfer;
 use Generated\Shared\Transfer\TourGuideTransfer;
 use Orm\Zed\TourGuide\Persistence\PyzTourGuide;
@@ -26,6 +27,14 @@ class TourGuideEntityManager extends AbstractEntityManager implements TourGuideE
 
         if ($tourGuideTransfer->getIdTourGuide() !== null) {
             $tourGuideEntity = $this->findTourGuideEntityById((int)$tourGuideTransfer->getIdTourGuide());
+        }
+
+        if ($tourGuideTransfer->getRoute() !== null && $tourGuideTransfer->getIdTourGuide() == null) {
+            $tourGuideEntity = $this->findTourGuideEntityByRoute((string)$tourGuideTransfer->getRoute());
+
+            if ($tourGuideEntity !== null) {
+                throw new Exception('Tour with route already exists');
+            }
         }
 
         if ($tourGuideEntity === null) {
@@ -99,6 +108,13 @@ class TourGuideEntityManager extends AbstractEntityManager implements TourGuideE
         return $this->getFactory()
             ->createTourGuideQuery()
             ->findOneByIdTourGuide($idTourGuide);
+    }
+
+    protected function findTourGuideEntityByRoute(string $route): ?PyzTourGuide
+    {
+        return $this->getFactory()
+            ->createTourGuideQuery()
+            ->findOneByRoute($route);
     }
 
     protected function findTourGuideStepEntityById(int $idTourGuideStep): ?PyzTourGuideStep

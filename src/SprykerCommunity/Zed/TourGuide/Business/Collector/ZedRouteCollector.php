@@ -32,6 +32,10 @@ class ZedRouteCollector implements ZedRouteCollectorInterface
                 continue;
             }
 
+            if (str_ends_with($path, 'delete') || str_ends_with($path, 'table')) {
+                continue;
+            }
+
             $urls[] = $path;
         }
 

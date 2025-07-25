@@ -95,6 +95,9 @@
                 <div class="alert alert-info">
                     {{ 'No steps found for this tour guide.' | trans }}
                 </div>
+                <a href="{{ url('/tour-guide/steps/create', {'fk-tour-guide': tourGuide.idTourGuide}) }}" class="btn">
+                    Add Step
+                </a>
             {% endif %}
         {% endblock %}
     {% endembed %}

@@ -10,6 +10,7 @@ declare(strict_types = 1);
 namespace SprykerCommunity\Zed\TourGuide\Communication\Form;
 
 use Generated\Shared\Transfer\TourGuideTransfer;
+use Spryker\Zed\Gui\Communication\Form\Type\Select2ComboBoxType;
 use Spryker\Zed\Kernel\Communication\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -121,7 +122,7 @@ class TourGuideForm extends AbstractType
         $zedUrls = $this->getFacade()->getAllZedUrls();
         $choices = array_combine($zedUrls, $zedUrls);
 
-        $builder->add(static::FIELD_ROUTE, ChoiceType::class, [
+        $builder->add(static::FIELD_ROUTE, Select2ComboBoxType::class, [
             'label' => 'Route',
             'required' => true,
             'choices' => $choices,

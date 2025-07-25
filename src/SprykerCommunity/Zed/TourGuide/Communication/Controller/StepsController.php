@@ -40,7 +40,6 @@ final class StepsController extends AbstractController
     {
         $tourGuideStepTransfer = new TourGuideStepTransfer();
 
-        // Get the fk-tour-guide parameter from the URL and set it on the transfer object
         $fkTourGuide = $request->query->getInt('fk-tour-guide');
         if ($fkTourGuide) {
             $tourGuideStepTransfer->setFkTourGuide($fkTourGuide);
@@ -90,7 +89,7 @@ final class StepsController extends AbstractController
 
             $this->addSuccessMessage('Tour guide step updated successfully.');
 
-            return $this->redirectResponse('/tour-guide/tour');
+            return $this->redirectResponse('/tour-guide/steps?id-tour-guide=' . $idTourGuideStep);
         }
 
         return $this->viewResponse([
@@ -102,14 +101,14 @@ final class StepsController extends AbstractController
     public function deleteAction(Request $request): RedirectResponse
     {
         $idTourGuideStep = $this->castId($request->query->get('id-tour-guide-step'));
-
         $tourGuideStepTransfer = $this->getFacade()->findTourGuideStepById($idTourGuideStep);
-        $idTourGuide = null;
 
-        if ($tourGuideStepTransfer !== null) {
-            $idTourGuide = $tourGuideStepTransfer->getFkTourGuide();
+        if ($tourGuideStepTransfer === null) {
+            $this->addErrorMessage('Tour guide step not found.');
+            return $this->redirectResponse('/tour-guide/tour');
         }
 
+        $idTourGuide = $tourGuideStepTransfer->getFkTourGuide();
         $deleted = $this->getFacade()->deleteTourGuideStep($idTourGuideStep);
 
         if ($deleted) {
@@ -118,10 +117,6 @@ final class StepsController extends AbstractController
             $this->addErrorMessage('Tour guide step not found.');
         }
 
-        if ($idTourGuide !== null) {
-            return $this->redirectResponse('/tour-guide/steps?id-tour-guide=' . $idTourGuide);
-        }
-
-        return $this->redirectResponse('/tour-guide/tour');
+        return $this->redirectResponse('/tour-guide/steps?id-tour-guide=' . $idTourGuide);
     }
 }

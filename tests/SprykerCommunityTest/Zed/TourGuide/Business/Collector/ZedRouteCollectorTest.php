@@ -17,13 +17,14 @@ use Symfony\Component\Routing\RouterInterface;
 
 final class ZedRouteCollectorTest extends TestCase
 {
-    public function testGetAllZedRoutesReturnsRoutesWithoutParameters(): void
+    public function testGetAllZedRoutesReturnsValidRoutesWithoutParameters(): void
     {
         // Arrange
         $routeCollection = new RouteCollection();
         $routeCollection->add('route1', new Route('/route1'));
         $routeCollection->add('route2', new Route('/route2'));
-        $routeCollection->add('route3', new Route('/route3/{param}'));
+        $routeCollection->add('route3', new Route('/route3/table'));
+        $routeCollection->add('route4', new Route('/route4/{param}'));
 
         $router = $this->createMock(RouterInterface::class);
         $router->expects($this->once())
@@ -39,6 +40,7 @@ final class ZedRouteCollectorTest extends TestCase
         $this->assertCount(2, $routes);
         $this->assertContains('/route1', $routes);
         $this->assertContains('/route2', $routes);
-        $this->assertNotContains('/route3/{param}', $routes);
+        $this->assertNotContains('/route3/table', $routes);
+        $this->assertNotContains('/route4/{param}', $routes);
     }
 }
