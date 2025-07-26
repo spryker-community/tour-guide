@@ -16,6 +16,8 @@ use SprykerCommunity\Zed\TourGuide\Business\Reader\TourGuideReader;
 use SprykerCommunity\Zed\TourGuide\Business\Reader\TourGuideReaderInterface;
 use SprykerCommunity\Zed\TourGuide\Business\Validator\RouteValidator;
 use SprykerCommunity\Zed\TourGuide\Business\Validator\RouteValidatorInterface;
+use SprykerCommunity\Zed\TourGuide\Business\Writer\TourGuideEventWriter;
+use SprykerCommunity\Zed\TourGuide\Business\Writer\TourGuideEventWriterInterface;
 use SprykerCommunity\Zed\TourGuide\Business\Writer\TourGuideWriter;
 use SprykerCommunity\Zed\TourGuide\Business\Writer\TourGuideWriterInterface;
 use SprykerCommunity\Zed\TourGuide\TourGuideDependencyProvider;
@@ -59,5 +61,13 @@ final class TourGuideBusinessFactory extends AbstractBusinessFactory
     public function getRouter(): RouterInterface
     {
         return $this->getProvidedDependency(TourGuideDependencyProvider::SERVICE_ROUTER);
+    }
+
+    public function createTourGuideEventWriter(): TourGuideEventWriterInterface
+    {
+        return new TourGuideEventWriter(
+            $this->getEntityManager(),
+            $this->getRepository(),
+        );
     }
 }

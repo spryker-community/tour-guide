@@ -11,6 +11,9 @@ namespace SprykerCommunity\Zed\TourGuide\Business;
 
 use Generated\Shared\Transfer\TourGuideCollectionTransfer;
 use Generated\Shared\Transfer\TourGuideCriteriaTransfer;
+use Generated\Shared\Transfer\TourGuideEventCollectionTransfer;
+use Generated\Shared\Transfer\TourGuideEventCriteriaTransfer;
+use Generated\Shared\Transfer\TourGuideEventTransfer;
 use Generated\Shared\Transfer\TourGuideStepCollectionTransfer;
 use Generated\Shared\Transfer\TourGuideStepCriteriaTransfer;
 use Generated\Shared\Transfer\TourGuideStepTransfer;
@@ -21,10 +24,6 @@ interface TourGuideFacadeInterface
     /**
      * Specification:
      * - Returns a collection of tour guides based on the provided criteria.
-     *
-     * @param \Generated\Shared\Transfer\TourGuideCriteriaTransfer $tourGuideCriteriaTransfer
-     *
-     * @return \Generated\Shared\Transfer\TourGuideCollectionTransfer
      */
     public function getTourGuideCollection(
         TourGuideCriteriaTransfer $tourGuideCriteriaTransfer,
@@ -120,4 +119,31 @@ interface TourGuideFacadeInterface
      * - Returns true if the step was deleted, false otherwise.
      */
     public function deleteTourGuideStep(int $idTourGuideStep): bool;
+
+    /**
+     * Specification:
+     * - Creates a new tour guide event.
+     * - Persists the event to the database.
+     * - Returns the created tour guide event with the ID set.
+     */
+    public function createTourGuideEvent(TourGuideEventTransfer $tourGuideEventTransfer): TourGuideEventTransfer;
+
+    /**
+     * Specification:
+     * - Tracks a tour guide event with the given tour guide ID, event type, and tour version.
+     * - Creates a new tour guide event.
+     * - Persists the event to the database.
+     * - Returns the created tour guide event with the ID set.
+     */
+    public function trackTourGuideEvent(int $idTourGuide, string $eventType, int $tourVersion): TourGuideEventTransfer;
+
+    /**
+     * Specification:
+     * - Returns a collection of tour guide events based on the provided criteria.
+     * - Filters events by ID, tour guide ID, event type, and tour version if provided in the criteria.
+     * - Returns the events with their related tour guide data.
+     */
+    public function getTourGuideEventCollection(
+        TourGuideEventCriteriaTransfer $tourGuideEventCriteriaTransfer,
+    ): TourGuideEventCollectionTransfer;
 }

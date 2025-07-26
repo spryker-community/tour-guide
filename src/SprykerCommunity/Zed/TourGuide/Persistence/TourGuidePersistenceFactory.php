@@ -9,9 +9,11 @@ declare(strict_types = 1);
 
 namespace SprykerCommunity\Zed\TourGuide\Persistence;
 
+use Orm\Zed\TourGuide\Persistence\PyzTourGuideEventQuery;
 use Orm\Zed\TourGuide\Persistence\PyzTourGuideQuery;
 use Orm\Zed\TourGuide\Persistence\PyzTourGuideStepQuery;
 use Spryker\Zed\Kernel\Persistence\AbstractPersistenceFactory;
+use SprykerCommunity\Zed\TourGuide\Persistence\Mapper\TourGuideEventMapper;
 use SprykerCommunity\Zed\TourGuide\Persistence\Mapper\TourGuideMapper;
 use SprykerCommunity\Zed\TourGuide\Persistence\Mapper\TourGuideStepMapper;
 
@@ -39,6 +41,18 @@ class TourGuidePersistenceFactory extends AbstractPersistenceFactory
     public function createTourGuideStepMapper(): TourGuideStepMapper
     {
         return new TourGuideStepMapper(
+            $this->createTourGuideMapper(),
+        );
+    }
+
+    public function createTourGuideEventQuery(): PyzTourGuideEventQuery
+    {
+        return PyzTourGuideEventQuery::create();
+    }
+
+    public function createTourGuideEventMapper(): TourGuideEventMapper
+    {
+        return new TourGuideEventMapper(
             $this->createTourGuideMapper(),
         );
     }

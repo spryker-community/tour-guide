@@ -5,7 +5,7 @@
  * For full license information, please view the LICENSE file that was distributed with this source code.
  */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace SprykerCommunity\Zed\TourGuide\Communication\Plugin\Application;
 
@@ -63,6 +63,7 @@ final class TourGuideTwigFunctionPlugin extends AbstractPlugin implements TwigPl
             ];
 
             $encodedConfig = json_encode([
+                'idTourGuide' => $tourGuideTransfer->getIdTourGuide(),
                 'route' => $route,
                 'version' => $tourGuideTransfer->getVersion(),
                 'steps' => $steps,

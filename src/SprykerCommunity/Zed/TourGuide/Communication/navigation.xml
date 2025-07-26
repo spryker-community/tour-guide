@@ -24,6 +24,14 @@
                 <action>create</action>
                 <visible>1</visible>
             </create-tour>
+            <event-list>
+                <label>Tour Events</label>
+                <title>Tour Events</title>
+                <bundle>tour-guide</bundle>
+                <controller>event</controller>
+                <action>index</action>
+                <visible>1</visible>
+            </event-list>
         </pages>
     </tour-guide>
 </config>

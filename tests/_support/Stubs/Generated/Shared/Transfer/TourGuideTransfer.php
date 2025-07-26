@@ -7,8 +7,6 @@
 
 declare(strict_types = 1);
 
-namespace Generated\Shared\Transfer;
-
 namespace tests\_support\Stubs\Generated\Shared\Transfer;
 
 final class TourGuideTransfer

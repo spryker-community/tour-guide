@@ -12,6 +12,9 @@ namespace SprykerCommunity\Zed\TourGuide\Business;
 use Generated\Shared\Transfer\RouteValidationRequestTransfer;
 use Generated\Shared\Transfer\TourGuideCollectionTransfer;
 use Generated\Shared\Transfer\TourGuideCriteriaTransfer;
+use Generated\Shared\Transfer\TourGuideEventCollectionTransfer;
+use Generated\Shared\Transfer\TourGuideEventCriteriaTransfer;
+use Generated\Shared\Transfer\TourGuideEventTransfer;
 use Generated\Shared\Transfer\TourGuideStepCollectionTransfer;
 use Generated\Shared\Transfer\TourGuideStepCriteriaTransfer;
 use Generated\Shared\Transfer\TourGuideStepTransfer;
@@ -24,8 +27,6 @@ use Spryker\Zed\Kernel\Business\AbstractFacade;
 final class TourGuideFacade extends AbstractFacade implements TourGuideFacadeInterface
 {
     /**
-     * {@inheritDoc}
-     *
      * @api
      */
     public function getTourGuideStepCollection(
@@ -37,8 +38,6 @@ final class TourGuideFacade extends AbstractFacade implements TourGuideFacadeInt
     }
 
     /**
-     * {@inheritDoc}
-     *
      * @api
      */
     public function findTourGuideStepById(int $idTourGuideStep): ?TourGuideStepTransfer
@@ -49,8 +48,6 @@ final class TourGuideFacade extends AbstractFacade implements TourGuideFacadeInt
     }
 
     /**
-     * {@inheritDoc}
-     *
      * @api
      */
     public function getTourGuideStepsByRoute(string $route): TourGuideStepCollectionTransfer
@@ -61,8 +58,6 @@ final class TourGuideFacade extends AbstractFacade implements TourGuideFacadeInt
     }
 
     /**
-     * {@inheritDoc}
-     *
      * @api
      */
     public function createTourGuideStep(TourGuideStepTransfer $tourGuideStepTransfer): TourGuideStepTransfer
@@ -73,8 +68,6 @@ final class TourGuideFacade extends AbstractFacade implements TourGuideFacadeInt
     }
 
     /**
-     * {@inheritDoc}
-     *
      * @api
      */
     public function updateTourGuideStep(TourGuideStepTransfer $tourGuideStepTransfer): TourGuideStepTransfer
@@ -85,8 +78,6 @@ final class TourGuideFacade extends AbstractFacade implements TourGuideFacadeInt
     }
 
     /**
-     * {@inheritDoc}
-     *
      * @api
      */
     public function deleteTourGuideStep(int $idTourGuideStep): bool
@@ -97,8 +88,6 @@ final class TourGuideFacade extends AbstractFacade implements TourGuideFacadeInt
     }
 
     /**
-     * {@inheritDoc}
-     *
      * @api
      *
      * @return array<string>
@@ -118,8 +107,6 @@ final class TourGuideFacade extends AbstractFacade implements TourGuideFacadeInt
     }
 
     /**
-     * {@inheritDoc}
-     *
      * @api
      */
     public function getTourGuideCollection(
@@ -131,8 +118,6 @@ final class TourGuideFacade extends AbstractFacade implements TourGuideFacadeInt
     }
 
     /**
-     * {@inheritDoc}
-     *
      * @api
      */
     public function findTourGuideById(int $idTourGuide): ?TourGuideTransfer
@@ -143,8 +128,6 @@ final class TourGuideFacade extends AbstractFacade implements TourGuideFacadeInt
     }
 
     /**
-     * {@inheritDoc}
-     *
      * @api
      */
     public function findTourGuideByRoute(string $route): ?TourGuideTransfer
@@ -155,8 +138,6 @@ final class TourGuideFacade extends AbstractFacade implements TourGuideFacadeInt
     }
 
     /**
-     * {@inheritDoc}
-     *
      * @api
      */
     public function createTourGuide(TourGuideTransfer $tourGuideTransfer): TourGuideTransfer
@@ -167,8 +148,6 @@ final class TourGuideFacade extends AbstractFacade implements TourGuideFacadeInt
     }
 
     /**
-     * {@inheritDoc}
-     *
      * @api
      */
     public function updateTourGuide(TourGuideTransfer $tourGuideTransfer): TourGuideTransfer
@@ -179,8 +158,6 @@ final class TourGuideFacade extends AbstractFacade implements TourGuideFacadeInt
     }
 
     /**
-     * {@inheritDoc}
-     *
      * @api
      */
     public function deleteTourGuide(int $idTourGuide): bool
@@ -191,8 +168,6 @@ final class TourGuideFacade extends AbstractFacade implements TourGuideFacadeInt
     }
 
     /**
-     * {@inheritDoc}
-     *
      * @api
      */
     public function getTourGuideStepsByTourGuideId(int $idTourGuide): TourGuideStepCollectionTransfer
@@ -200,5 +175,34 @@ final class TourGuideFacade extends AbstractFacade implements TourGuideFacadeInt
         return $this->getFactory()
             ->createTourGuideReader()
             ->getTourGuideStepsByTourGuideId($idTourGuide);
+    }
+
+    /**
+     * @api
+     */
+    public function createTourGuideEvent(TourGuideEventTransfer $tourGuideEventTransfer): TourGuideEventTransfer
+    {
+        return $this->getFactory()
+            ->createTourGuideEventWriter()
+            ->createTourGuideEvent($tourGuideEventTransfer);
+    }
+
+    /**
+     * @api
+     */
+    public function trackTourGuideEvent(int $idTourGuide, string $eventType, int $tourVersion): TourGuideEventTransfer
+    {
+        return $this->getFactory()
+            ->createTourGuideEventWriter()
+            ->trackTourGuideEvent($idTourGuide, $eventType, $tourVersion);
+    }
+
+    /**
+     * @api
+     */
+    public function getTourGuideEventCollection(
+        TourGuideEventCriteriaTransfer $tourGuideEventCriteriaTransfer,
+    ): TourGuideEventCollectionTransfer {
+        return $this->getRepository()->getTourGuideEventCollection($tourGuideEventCriteriaTransfer);
     }
 }

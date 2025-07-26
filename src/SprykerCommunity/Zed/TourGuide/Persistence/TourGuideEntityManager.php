@@ -10,9 +10,11 @@ declare(strict_types = 1);
 namespace SprykerCommunity\Zed\TourGuide\Persistence;
 
 use Exception;
+use Generated\Shared\Transfer\TourGuideEventTransfer;
 use Generated\Shared\Transfer\TourGuideStepTransfer;
 use Generated\Shared\Transfer\TourGuideTransfer;
 use Orm\Zed\TourGuide\Persistence\PyzTourGuide;
+use Orm\Zed\TourGuide\Persistence\PyzTourGuideEvent;
 use Orm\Zed\TourGuide\Persistence\PyzTourGuideStep;
 use Spryker\Zed\Kernel\Persistence\AbstractEntityManager;
 
@@ -29,7 +31,7 @@ class TourGuideEntityManager extends AbstractEntityManager implements TourGuideE
             $tourGuideEntity = $this->findTourGuideEntityById((int)$tourGuideTransfer->getIdTourGuide());
         }
 
-        if ($tourGuideTransfer->getRoute() !== null && $tourGuideTransfer->getIdTourGuide() == null) {
+        if ($tourGuideTransfer->getRoute() !== null && $tourGuideTransfer->getIdTourGuide() === null) {
             $tourGuideEntity = $this->findTourGuideEntityByRoute((string)$tourGuideTransfer->getRoute());
 
             if ($tourGuideEntity !== null) {
@@ -130,5 +132,53 @@ class TourGuideEntityManager extends AbstractEntityManager implements TourGuideE
             ->createTourGuideStepQuery()
             ->filterByFkTourGuide($idTourGuide)
             ->delete();
+
+        $this->getFactory()
+            ->createTourGuideEventQuery()
+            ->filterByFkTourGuide($idTourGuide)
+            ->delete();
+    }
+
+    public function saveTourGuideEvent(TourGuideEventTransfer $tourGuideEventTransfer): TourGuideEventTransfer
+    {
+        $tourGuideEventEntity = null;
+
+        if ($tourGuideEventTransfer->getIdTourGuideEvent() !== null) {
+            $tourGuideEventEntity = $this->findTourGuideEventEntityById((int)$tourGuideEventTransfer->getIdTourGuideEvent());
+        }
+
+        if ($tourGuideEventEntity === null) {
+            $tourGuideEventEntity = new PyzTourGuideEvent();
+        }
+
+        $tourGuideEventEntity = $this->getFactory()
+            ->createTourGuideEventMapper()
+            ->mapTourGuideEventTransferToTourGuideEventEntity($tourGuideEventTransfer, $tourGuideEventEntity);
+
+        $tourGuideEventEntity->save();
+
+        return $this->getFactory()
+            ->createTourGuideEventMapper()
+            ->mapTourGuideEventEntityToTourGuideEventTransfer($tourGuideEventEntity, $tourGuideEventTransfer);
+    }
+
+    public function deleteTourGuideEvent(int $idTourGuideEvent): bool
+    {
+        $tourGuideEventEntity = $this->findTourGuideEventEntityById($idTourGuideEvent);
+
+        if ($tourGuideEventEntity === null) {
+            return false;
+        }
+
+        $tourGuideEventEntity->delete();
+
+        return true;
+    }
+
+    protected function findTourGuideEventEntityById(int $idTourGuideEvent): ?PyzTourGuideEvent
+    {
+        return $this->getFactory()
+            ->createTourGuideEventQuery()
+            ->findOneByIdTourGuideEvent($idTourGuideEvent);
     }
 }

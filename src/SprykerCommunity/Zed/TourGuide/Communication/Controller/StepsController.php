@@ -105,6 +105,7 @@ final class StepsController extends AbstractController
 
         if ($tourGuideStepTransfer === null) {
             $this->addErrorMessage('Tour guide step not found.');
+
             return $this->redirectResponse('/tour-guide/tour');
         }
 

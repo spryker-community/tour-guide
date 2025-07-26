@@ -11,6 +11,8 @@ namespace SprykerCommunity\Zed\TourGuide\Persistence;
 
 use Generated\Shared\Transfer\TourGuideCollectionTransfer;
 use Generated\Shared\Transfer\TourGuideCriteriaTransfer;
+use Generated\Shared\Transfer\TourGuideEventCollectionTransfer;
+use Generated\Shared\Transfer\TourGuideEventCriteriaTransfer;
 use Generated\Shared\Transfer\TourGuideStepCollectionTransfer;
 use Generated\Shared\Transfer\TourGuideStepCriteriaTransfer;
 use Generated\Shared\Transfer\TourGuideStepTransfer;
@@ -35,4 +37,8 @@ interface TourGuideRepositoryInterface
     public function getTourGuideStepsByRoute(string $route): TourGuideStepCollectionTransfer;
 
     public function getTourGuideStepsByTourGuideId(int $idTourGuide): TourGuideStepCollectionTransfer;
+
+    public function getTourGuideEventCollection(
+        TourGuideEventCriteriaTransfer $tourGuideEventCriteriaTransfer,
+    ): TourGuideEventCollectionTransfer;
 }
