@@ -13,8 +13,11 @@ use Generated\Shared\Transfer\TourGuideStepTransfer;
 use Generated\Shared\Transfer\TourGuideTransfer;
 use Spryker\Zed\Acl\Business\AclFacadeInterface;
 use Spryker\Zed\Kernel\Communication\AbstractCommunicationFactory;
+use SprykerCommunity\Zed\TourGuide\Communication\Form\DataProvider\TourGuideEventTableFilterFormDataProvider;
+use SprykerCommunity\Zed\TourGuide\Communication\Form\TourGuideEventTableFilterForm;
 use SprykerCommunity\Zed\TourGuide\Communication\Form\TourGuideForm;
 use SprykerCommunity\Zed\TourGuide\Communication\Form\TourGuideStepForm;
+use SprykerCommunity\Zed\TourGuide\Communication\Table\TourGuideEventTable;
 use SprykerCommunity\Zed\TourGuide\Communication\Table\TourGuideTable;
 use SprykerCommunity\Zed\TourGuide\TourGuideDependencyProvider;
 use Symfony\Component\Form\FormInterface;
@@ -29,6 +32,17 @@ final class TourGuideCommunicationFactory extends AbstractCommunicationFactory
     {
         return new TourGuideTable(
             $this->getFacade(),
+        );
+    }
+
+    /**
+     * @return \SprykerCommunity\Zed\TourGuide\Communication\Table\TourGuideEventTable
+     */
+    public function createTourGuideEventTable(): TourGuideEventTable
+    {
+        return new TourGuideEventTable(
+            $this->getFacade(),
+            $this->getRequestStack()->getCurrentRequest(),
         );
     }
 
@@ -54,11 +68,6 @@ final class TourGuideCommunicationFactory extends AbstractCommunicationFactory
         );
     }
 
-    public function createTourGuideStepFormType(): TourGuideStepForm
-    {
-        return new TourGuideStepForm();
-    }
-
     /**
      * @uses \Spryker\Zed\Http\Communication\Plugin\Application\HttpApplicationPlugin::SERVICE_REQUEST_STACK
      */
@@ -72,5 +81,23 @@ final class TourGuideCommunicationFactory extends AbstractCommunicationFactory
     public function getAclFacade(): AclFacadeInterface
     {
         return $this->getProvidedDependency(TourGuideDependencyProvider::FACADE_ACL);
+    }
+
+    public function createTourGuideEventTableFilterForm(): FormInterface
+    {
+        $dataProvider = $this->createTourGuideEventTableFilterFormDataProvider();
+
+        return $this->getFormFactory()->create(
+            TourGuideEventTableFilterForm::class,
+            $dataProvider->getData(),
+            $dataProvider->getOptions(),
+        );
+    }
+
+    protected function createTourGuideEventTableFilterFormDataProvider(): TourGuideEventTableFilterFormDataProvider
+    {
+        return new TourGuideEventTableFilterFormDataProvider(
+            $this->getFacade(),
+        );
     }
 }

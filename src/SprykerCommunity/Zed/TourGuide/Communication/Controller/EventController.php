@@ -19,11 +19,35 @@ use Symfony\Component\HttpFoundation\Request;
  */
 final class EventController extends AbstractController
 {
-    /**
-     * @param \Symfony\Component\HttpFoundation\Request $request
-     *
-     * @return \Symfony\Component\HttpFoundation\JsonResponse
-     */
+    public function indexAction(Request $request): array
+    {
+        $tableFilterForm = $this->getFactory()
+            ->createTourGuideEventTableFilterForm()
+            ->handleRequest($request);
+
+        $tourGuideEventTable = $this->getFactory()->createTourGuideEventTable();
+        $tourGuideEventTable->applyCriteria($tableFilterForm->getData());
+
+        return $this->viewResponse([
+            'tourGuideEventTable' => $tourGuideEventTable->render(),
+            'tableFilterForm' => $tableFilterForm->createView(),
+        ]);
+    }
+
+    public function tableAction(Request $request): JsonResponse
+    {
+        $tableFilterForm = $this->getFactory()
+            ->createTourGuideEventTableFilterForm()
+            ->handleRequest($request);
+
+        $tourGuideEventTable = $this->getFactory()->createTourGuideEventTable();
+        $tourGuideEventTable->applyCriteria($tableFilterForm->getData());
+
+        return $this->jsonResponse(
+            $tourGuideEventTable->fetchData(),
+        );
+    }
+
     public function startAction(Request $request): JsonResponse
     {
         $idTourGuide = (int)$request->request->get('idTourGuide');
@@ -37,11 +61,6 @@ final class EventController extends AbstractController
         ]);
     }
 
-    /**
-     * @param \Symfony\Component\HttpFoundation\Request $request
-     *
-     * @return \Symfony\Component\HttpFoundation\JsonResponse
-     */
     public function pauseAction(Request $request): JsonResponse
     {
         $idTourGuide = $this->castId($request->request->get('idTourGuide'));
@@ -55,11 +74,6 @@ final class EventController extends AbstractController
         ]);
     }
 
-    /**
-     * @param \Symfony\Component\HttpFoundation\Request $request
-     *
-     * @return \Symfony\Component\HttpFoundation\JsonResponse
-     */
     public function finishAction(Request $request): JsonResponse
     {
         $idTourGuide = $this->castId($request->request->get('idTourGuide'));

@@ -31,7 +31,7 @@ class TourGuideEntityManager extends AbstractEntityManager implements TourGuideE
             $tourGuideEntity = $this->findTourGuideEntityById((int)$tourGuideTransfer->getIdTourGuide());
         }
 
-        if ($tourGuideTransfer->getRoute() !== null && $tourGuideTransfer->getIdTourGuide() == null) {
+        if ($tourGuideTransfer->getRoute() !== null && $tourGuideTransfer->getIdTourGuide() === null) {
             $tourGuideEntity = $this->findTourGuideEntityByRoute((string)$tourGuideTransfer->getRoute());
 
             if ($tourGuideEntity !== null) {

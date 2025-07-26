@@ -11,6 +11,9 @@ namespace SprykerCommunity\Zed\TourGuide\Persistence;
 
 use Generated\Shared\Transfer\TourGuideCollectionTransfer;
 use Generated\Shared\Transfer\TourGuideCriteriaTransfer;
+use Generated\Shared\Transfer\TourGuideEventCollectionTransfer;
+use Generated\Shared\Transfer\TourGuideEventCriteriaTransfer;
+use Generated\Shared\Transfer\TourGuideEventTransfer;
 use Generated\Shared\Transfer\TourGuideStepCollectionTransfer;
 use Generated\Shared\Transfer\TourGuideStepCriteriaTransfer;
 use Generated\Shared\Transfer\TourGuideStepTransfer;
@@ -157,5 +160,38 @@ class TourGuideRepository extends AbstractRepository implements TourGuideReposit
         $tourGuideStepCriteriaTransfer->setIsActive(true);
 
         return $this->getTourGuideStepCollection($tourGuideStepCriteriaTransfer);
+    }
+
+    public function getTourGuideEventCollection(
+        TourGuideEventCriteriaTransfer $tourGuideEventCriteriaTransfer,
+    ): TourGuideEventCollectionTransfer {
+        $tourGuideEventQuery = $this->getFactory()->createTourGuideEventQuery();
+
+        if ($tourGuideEventCriteriaTransfer->getIdTourGuideEvent() !== null) {
+            $tourGuideEventQuery->filterByIdTourGuideEvent($tourGuideEventCriteriaTransfer->getIdTourGuideEvent());
+        }
+
+        if ($tourGuideEventCriteriaTransfer->getFkTourGuide() !== null) {
+            $tourGuideEventQuery->filterByFkTourGuide($tourGuideEventCriteriaTransfer->getFkTourGuide());
+        }
+
+        if ($tourGuideEventCriteriaTransfer->getEventType() !== null) {
+            $tourGuideEventQuery->filterByEventType($tourGuideEventCriteriaTransfer->getEventType());
+        }
+
+        $tourGuideEventQuery->leftJoinWithPyzTourGuide();
+
+        $tourGuideEventEntityCollection = $tourGuideEventQuery->find();
+        $tourGuideEventCollectionTransfer = new TourGuideEventCollectionTransfer();
+
+        foreach ($tourGuideEventEntityCollection as $tourGuideEventEntity) {
+            $tourGuideEventTransfer = $this->getFactory()
+                ->createTourGuideEventMapper()
+                ->mapTourGuideEventEntityToTourGuideEventTransfer($tourGuideEventEntity, new TourGuideEventTransfer());
+
+            $tourGuideEventCollectionTransfer->addTourGuideEvent($tourGuideEventTransfer);
+        }
+
+        return $tourGuideEventCollectionTransfer;
     }
 }

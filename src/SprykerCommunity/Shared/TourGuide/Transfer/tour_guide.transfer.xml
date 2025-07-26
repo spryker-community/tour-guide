@@ -61,6 +61,7 @@
         <property name="idTourGuideEvent" type="int"/>
         <property name="fkTourGuide" type="int"/>
         <property name="eventType" type="string"/>
+        <property name="route" type="string"/>
     </transfer>
 
     <transfer name="TourGuideButton">
