@@ -20,7 +20,6 @@ async function loadTourConfig(route) {
     }
 }
 
-// Function to track tour events with the backend
 async function trackTourEvent(idTourGuide, eventType, tourVersion) {
     try {
         const response = await fetch(`/tour-guide/event/${eventType}`, {
@@ -45,58 +44,109 @@ async function trackTourEvent(idTourGuide, eventType, tourVersion) {
     }
 }
 
-// Function to create and add pause button to the tour footer
 function createPauseButton(tour, route, version) {
-    // Add styles to the document
     if (!document.getElementById('tour-pause-button-styles')) {
         const styleEl = document.createElement('style');
         styleEl.id = 'tour-pause-button-styles';
         document.head.appendChild(styleEl);
     }
 
-    // Function to add pause button to the current step's footer
     const addPauseButtonToFooter = () => {
-        // Use setTimeout to ensure the DOM has been updated
         setTimeout(() => {
-            // Find all shepherd footers
             const footers = document.querySelectorAll('.shepherd-footer');
 
-            // Add pause button to the most recent footer (current step)
             if (footers.length > 0) {
                 const currentFooter = footers[footers.length - 1];
 
-                // Check if the footer already has a pause button
                 if (!currentFooter.querySelector('.tour-pause-button')) {
-                    // Create pause button element
                     const pauseButton = document.createElement('button');
                     pauseButton.className = 'tour-pause-button';
                     pauseButton.textContent = 'Pause';
                     pauseButton.title = 'Pause Tour';
 
-                    // Add click event to pause the tour
                     pauseButton.addEventListener('click', () => {
                         const currentStepIndex = tour.getCurrentStep().id;
-                        // Save the current step index to localStorage
                         localStorage.setItem(`tourPaused_${route}_v${version}`, currentStepIndex);
-                        // Track pause event with the backend
                         if (window.tourConfig && window.tourConfig.idTourGuide) {
                             trackTourEvent(window.tourConfig.idTourGuide, 'pause', version);
                         }
-                        // Hide the tour
                         tour.hide();
                     });
 
-                    // Add the button to the footer (at the beginning)
                     currentFooter.insertBefore(pauseButton, currentFooter.firstChild);
                 }
             }
-        }, 50); // Small delay to ensure the DOM has been updated
+        }, 50);
     };
 
-    // Add pause button to each step when it's shown
     tour.on('show', addPauseButtonToFooter);
 
     return addPauseButtonToFooter;
+}
+
+/**
+ * Wait for an element to be present in the DOM
+ * @param {string} selector - CSS selector for the element
+ * @param {number} timeout - Maximum time to wait in milliseconds
+ * @returns {Promise<Element|null>} - The found element or null if not found
+ */
+function waitForElement(selector, timeout = 3000) {
+    return new Promise((resolve) => {
+        const element = document.querySelector(selector);
+        if (element) {
+            resolve(element);
+            return;
+        }
+
+        const timeoutId = setTimeout(() => {
+            console.warn(`Timeout waiting for element: ${selector}`);
+            resolve(null);
+        }, timeout);
+
+        const observer = new MutationObserver((mutations, obs) => {
+            const element = document.querySelector(selector);
+            if (element) {
+                clearTimeout(timeoutId);
+                obs.disconnect();
+                resolve(element);
+            }
+        });
+
+        observer.observe(document.body, {
+            childList: true,
+            subtree: true
+        });
+    });
+}
+
+/**
+ * Creates a button in the footer to start the tour
+ * @param {string} route - The route for the tour
+ * @param {number} version - The version of the tour
+ */
+function createTourStartButton(route, version = 1) {
+    if (document.getElementById('tour-start-button')) {
+        return;
+    }
+
+    waitForElement('.footer').then(footer => {
+        if (footer) {
+            const startButton = document.createElement('i');
+            startButton.id = 'tour-start-button';
+            startButton.classList.add('fa', 'fa-map-signs');
+            startButton.title = 'Start Guided Tour';
+
+            startButton.addEventListener('click', () => {
+                if (window.shepherdTour) {
+                    window.shepherdTour.start();
+                } else {
+                    restartTour(route, version);
+                }
+            });
+
+            footer.appendChild(startButton);
+        }
+    });
 }
 
 export async function initTourGuide(input = 'default') {
@@ -122,24 +172,32 @@ export async function initTourGuide(input = 'default') {
 
     const tour = new Shepherd.Tour({
         useModalOverlay: true,
-        classPrefix: 'pyz-',
         useHistory: true,
         defaultStepOptions: {
             cancelIcon: {enabled: true},
             classes: 'shepherd-theme-default',
             scrollTo: true,
-            ...defaultStepOptions
+            ...defaultStepOptions,
+            beforeShowPromise: function(step) {
+                return new Promise((resolve) => {
+                    if (step && step.options && step.options.attachTo && step.options.attachTo.element) {
+                        const selector = step.options.attachTo.element;
+                        waitForElement(selector).then(() => {
+                            resolve();
+                        });
+                    } else {
+                        resolve();
+                    }
+                });
+            }
         }
     });
 
     steps.forEach((step, index) => {
         const isFirstStep = index === 0;
         const isLastStep = index === steps.length - 1;
-
-        // Generate buttons based on step position
         const buttons = [];
 
-        // Add back button if not the first step
         if (!isFirstStep) {
             buttons.push({
                 text: 'Back',
@@ -148,7 +206,6 @@ export async function initTourGuide(input = 'default') {
             });
         }
 
-        // Add next button if not the last step, otherwise add finish button
         if (!isLastStep) {
             buttons.push({
                 text: 'Next',
@@ -165,7 +222,7 @@ export async function initTourGuide(input = 'default') {
 
         tour.addStep({
             ...step,
-            buttons: buttons // Override any buttons defined in the backoffice module
+            buttons: buttons
         });
     });
 
@@ -173,9 +230,7 @@ export async function initTourGuide(input = 'default') {
 
     tour.on('complete', () => {
         localStorage.setItem(storageKey, 'true');
-        // Also remove any paused state when tour is completed
         localStorage.removeItem(`tourPaused_${route}_v${version}`);
-        // Track finish event with the backend
         if (window.tourConfig && window.tourConfig.idTourGuide) {
             trackTourEvent(window.tourConfig.idTourGuide, 'finish', version);
         }
@@ -183,21 +238,14 @@ export async function initTourGuide(input = 'default') {
 
     tour.on('cancel', () => {
         localStorage.setItem(storageKey, 'true');
-        // Also remove any paused state when tour is cancelled
         localStorage.removeItem(`tourPaused_${route}_v${version}`);
-        // Track finish event with the backend (cancelling is also considered finishing)
         if (window.tourConfig && window.tourConfig.idTourGuide) {
             trackTourEvent(window.tourConfig.idTourGuide, 'finish', version);
         }
     });
 
-    // Add event listener for tour start to create the pause button
     tour.on('start', () => {
         createPauseButton(tour, route, version);
-        // Track start event with the backend
-
-        console.log(window.tourConfig)
-        console.log(window.tourConfig.idTourGuide)
 
         if (window.tourConfig && window.tourConfig.idTourGuide) {
             trackTourEvent(window.tourConfig.idTourGuide, 'start', version);
@@ -206,12 +254,13 @@ export async function initTourGuide(input = 'default') {
 
     window.shepherdTour = tour;
 
-    // Check if there's a paused tour
     const pausedStepId = localStorage.getItem(`tourPaused_${route}_v${version}`);
     if (pausedStepId) {
-        // If there's a paused tour, we'll resume it later
         tour.pausedStepId = pausedStepId;
     }
+
+    // Add the tour start button to the footer when a tour is available
+    createTourStartButton(route, version);
 
     return !localStorage.getItem(storageKey);
 }
@@ -228,22 +277,33 @@ function restartTour(route, version = 1) {
     }
 }
 
-function resolveAction(tour, action) {
-    if (typeof action === 'function') return action;
-    switch (action) {
-        case 'next':
-            return tour.next;
-        case 'back':
-            return tour.back;
-        case 'cancel':
-            return tour.cancel;
-        default:
-            return () => {
-            };
-    }
-}
-
 window.restartTour = restartTour;
+
+/**
+ * Wait for AJAX requests to complete and DOM to be fully loaded
+ * @param {number} timeout - Maximum time to wait in milliseconds
+ * @returns {Promise<void>}
+ */
+function waitForPageLoad(timeout = 5000) {
+    return new Promise((resolve) => {
+        if (document.readyState === 'complete') {
+            setTimeout(resolve, 1500);
+            return;
+        }
+
+        const timeoutId = setTimeout(() => {
+            console.warn('Timeout waiting for page to fully load');
+            resolve();
+        }, timeout);
+
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                clearTimeout(timeoutId);
+                resolve();
+            }, 1500);
+        }, { once: true });
+    });
+}
 
 /**
  * Automatically initialize and start the tour guide if not completed
@@ -261,25 +321,22 @@ export async function autoStartTourGuide(config) {
     const storageKey = `tourCompleted_${route}_v${version}`;
     const pausedStepKey = `tourPaused_${route}_v${version}`;
 
-    // Check if there's a paused tour or if the tour hasn't been completed yet
     const isPaused = localStorage.getItem(pausedStepKey);
     const isNotCompleted = !localStorage.getItem(storageKey);
 
-    if (isPaused || isNotCompleted) {
-        await initTourGuide(config);
+    // Always initialize the tour to make the start button available
+    await waitForPageLoad();
+    await initTourGuide(config);
 
+    // Only auto-start the tour if it's paused or not completed
+    if (isPaused || isNotCompleted) {
         if (window.shepherdTour) {
-            // Start the tour
             window.shepherdTour.start();
 
-            // If there's a paused tour, show the specific step
             if (isPaused && window.shepherdTour.pausedStepId) {
                 try {
-                    // Get the step by ID
                     const stepId = parseInt(window.shepherdTour.pausedStepId, 10);
-                    // Show the step
                     window.shepherdTour.show(stepId);
-                    // Remove the paused state as we've resumed it
                     localStorage.removeItem(pausedStepKey);
                 } catch (e) {
                     console.error('Error resuming tour from paused step:', e);

@@ -9,7 +9,9 @@ declare(strict_types = 1);
 
 namespace SprykerCommunity\Zed\TourGuide\Business;
 
+use Spryker\Zed\Acl\Business\AclFacadeInterface;
 use Spryker\Zed\Kernel\Business\AbstractBusinessFactory;
+use Spryker\Zed\User\Business\UserFacadeInterface;
 use SprykerCommunity\Zed\TourGuide\Business\Collector\ZedRouteCollector;
 use SprykerCommunity\Zed\TourGuide\Business\Collector\ZedRouteCollectorInterface;
 use SprykerCommunity\Zed\TourGuide\Business\Reader\TourGuideReader;
@@ -33,6 +35,8 @@ final class TourGuideBusinessFactory extends AbstractBusinessFactory
     {
         return new TourGuideReader(
             $this->getRepository(),
+            $this->getUserFacade(),
+            $this->getAclFacade(),
         );
     }
 
@@ -61,6 +65,16 @@ final class TourGuideBusinessFactory extends AbstractBusinessFactory
     public function getRouter(): RouterInterface
     {
         return $this->getProvidedDependency(TourGuideDependencyProvider::SERVICE_ROUTER);
+    }
+
+    public function getUserFacade(): UserFacadeInterface
+    {
+        return $this->getProvidedDependency(TourGuideDependencyProvider::FACADE_USER);
+    }
+
+    public function getAclFacade(): AclFacadeInterface
+    {
+        return $this->getProvidedDependency(TourGuideDependencyProvider::FACADE_ACL);
     }
 
     public function createTourGuideEventWriter(): TourGuideEventWriterInterface

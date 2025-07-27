@@ -15,15 +15,24 @@ use Generated\Shared\Transfer\TourGuideStepCollectionTransfer;
 use Generated\Shared\Transfer\TourGuideStepCriteriaTransfer;
 use Generated\Shared\Transfer\TourGuideStepTransfer;
 use Generated\Shared\Transfer\TourGuideTransfer;
+use Spryker\Zed\Acl\Business\AclFacadeInterface;
+use Spryker\Zed\User\Business\UserFacadeInterface;
 use SprykerCommunity\Zed\TourGuide\Persistence\TourGuideRepositoryInterface;
 
 class TourGuideReader implements TourGuideReaderInterface
 {
     protected TourGuideRepositoryInterface $tourGuideRepository;
+    protected UserFacadeInterface $userFacade;
+    protected AclFacadeInterface $aclFacade;
 
-    public function __construct(TourGuideRepositoryInterface $tourGuideRepository)
-    {
+    public function __construct(
+        TourGuideRepositoryInterface $tourGuideRepository,
+        UserFacadeInterface $userFacade,
+        AclFacadeInterface $aclFacade
+    ) {
         $this->tourGuideRepository = $tourGuideRepository;
+        $this->userFacade = $userFacade;
+        $this->aclFacade = $aclFacade;
     }
 
     public function getTourGuideCollection(
@@ -39,7 +48,27 @@ class TourGuideReader implements TourGuideReaderInterface
 
     public function findTourGuideByRoute(string $route): ?TourGuideTransfer
     {
-        return $this->tourGuideRepository->findTourGuideByRoute($route);
+        $tourGuideTransfer = $this->tourGuideRepository->findTourGuideByRoute($route);
+
+        if ($tourGuideTransfer === null) {
+            return null;
+        }
+
+        $currentUser = $this->userFacade->getCurrentUser();
+
+        if ($tourGuideTransfer->getAclGroup() === null || $tourGuideTransfer->getFkAclGroup() === null) {
+            return $tourGuideTransfer;
+        }
+
+        $userGroups = $this->aclFacade->getUserGroups($currentUser->getIdUser());
+
+        foreach ($userGroups->getGroups() as $userGroup) {
+            if ($userGroup->getIdAclGroup() === $tourGuideTransfer->getFkAclGroup()) {
+                return $tourGuideTransfer;
+            }
+        }
+
+        return null;
     }
 
     public function getTourGuideStepCollection(

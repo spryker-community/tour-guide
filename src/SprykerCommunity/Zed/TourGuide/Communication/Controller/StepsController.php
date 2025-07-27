@@ -89,7 +89,7 @@ final class StepsController extends AbstractController
 
             $this->addSuccessMessage('Tour guide step updated successfully.');
 
-            return $this->redirectResponse('/tour-guide/steps?id-tour-guide=' . $idTourGuideStep);
+            return $this->redirectResponse('/tour-guide/steps?id-tour-guide=' . $tourGuideStepTransfer->getFkTourGuide());
         }
 
         return $this->viewResponse([

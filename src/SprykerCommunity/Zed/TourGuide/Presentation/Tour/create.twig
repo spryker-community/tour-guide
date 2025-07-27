@@ -1,7 +1,7 @@
 {% extends '@Gui/Layout/layout.twig' %}
 
 {% if widget_title is not defined %}
-    {% set widget_title = 'Create Tour Guide' | trans %}
+    {% set widget_title = 'Create Tour' | trans %}
 {% endif %}
 
 {% block section_title %}{{ widget_title }}{% endblock %}
@@ -18,7 +18,7 @@
             {{ form_start(tourGuideForm) }}
             {{ form_widget(tourGuideForm) }}
 
-            <input type="submit" class="btn btn-primary safe-submit" value="{{ 'Save' | trans }}" />
+            <input type="submit" class="btn btn-primary safe-submit" value="{{ 'Save' | trans }}"/>
             {{ form_end(tourGuideForm) }}
         {% endblock %}
     {% endembed %}
