@@ -136,9 +136,9 @@ Clear the cache for navigation:
 vendor/bin/console application:build-navigation-cache
 ```
 
-## Usage
+## Screenshot
 
-tbd
+![Guided Tours for Back Office](guided_tours.png)
 
 ## License
 
