@@ -1,6 +1,6 @@
 {% extends '@Gui/Layout/layout.twig' %}
 
-{% set widget_title = 'View Tour Guide' %}
+{% set widget_title = 'View Tour' %}
 {% block section_title %}{{ widget_title | trans }}{% endblock %}
 
 {% block action %}
@@ -16,7 +16,7 @@
 {% endblock %}
 
 {% block content %}
-    {% embed '@Gui/Partials/widget.twig' with { widget_title: 'Tour Guide Details' | trans } %}
+    {% embed '@Gui/Partials/widget.twig' with { widget_title: 'Tour Details' | trans } %}
         {% block widget_content %}
             <div class="row">
                 <div class="col-md-12">
@@ -49,7 +49,7 @@
         {% endblock %}
     {% endembed %}
 
-    {% embed '@Gui/Partials/widget.twig' with { widget_title: 'Tour Guide Steps' | trans } %}
+    {% embed '@Gui/Partials/widget.twig' with { widget_title: 'Tour Steps' | trans } %}
         {% block widget_content %}
             {% if tourGuideSteps|length > 0 %}
                 <table class="table table-striped table-bordered table-hover gui-table-data">

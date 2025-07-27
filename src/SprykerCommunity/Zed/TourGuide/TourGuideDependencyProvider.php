@@ -29,10 +29,17 @@ final class TourGuideDependencyProvider extends AbstractBundleDependencyProvider
      */
     public const FACADE_ACL = 'FACADE_ACL';
 
+    /**
+     * @var string
+     */
+    public const FACADE_USER = 'FACADE_USER';
+
     public function provideBusinessLayerDependencies(Container $container): Container
     {
         $container = parent::provideBusinessLayerDependencies($container);
         $container = $this->addRouter($container);
+        $container = $this->addUserFacade($container);
+        $container = $this->addAclFacade($container);
 
         return $container;
     }
@@ -68,6 +75,16 @@ final class TourGuideDependencyProvider extends AbstractBundleDependencyProvider
         $container->set(static::FACADE_ACL, function (Container $container) {
             /** @phpstan-ignore-next-line */
             return $container->getLocator()->acl()->facade();
+        });
+
+        return $container;
+    }
+
+    protected function addUserFacade(Container $container): Container
+    {
+        $container->set(static::FACADE_USER, function (Container $container) {
+            /** @phpstan-ignore-next-line */
+            return $container->getLocator()->user()->facade();
         });
 
         return $container;

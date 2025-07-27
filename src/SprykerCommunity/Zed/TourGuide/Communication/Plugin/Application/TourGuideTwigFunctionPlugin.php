@@ -105,7 +105,7 @@ final class TourGuideTwigFunctionPlugin extends AbstractPlugin implements TwigPl
                 'title' => $stepTransfer->getTitle(),
                 'text' => $stepTransfer->getText(),
                 'attachTo' => [
-                    'element' => ltrim($stepTransfer->getAttachToElement(), '.'),
+                    'element' => $stepTransfer->getAttachToElement(),
                     'on' => $stepTransfer->getAttachToPosition(),
                 ],
             ];

@@ -1,10 +1,10 @@
 {% extends '@Gui/Layout/layout.twig' %}
 
-{% set widget_title = 'Tour Guide Events' %}
+{% set widget_title = 'Tour Events' %}
 {% block section_title %}{{ widget_title | trans }}{% endblock %}
 
 {% block content %}
-    {% embed '@Gui/Partials/widget.twig' with { widget_title: 'Tour Guide Events' | trans } %}
+    {% embed '@Gui/Partials/widget.twig' with { widget_title: 'Tour Events' | trans } %}
 
         {% block widget_content %}
             {% include '@TourGuide/Partials/table-filter-form.twig' with { form: tableFilterForm } %}

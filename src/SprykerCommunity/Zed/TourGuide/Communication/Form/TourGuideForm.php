@@ -53,9 +53,6 @@ class TourGuideForm extends AbstractType
      */
     public const FIELD_IS_ACTIVE = 'isActive';
 
-    /**
-     * @return string
-     */
     public function getBlockPrefix(): string
     {
         return 'tour_guide';
@@ -123,7 +120,7 @@ class TourGuideForm extends AbstractType
         $choices = array_combine($zedUrls, $zedUrls);
 
         $builder->add(static::FIELD_ROUTE, Select2ComboBoxType::class, [
-            'label' => 'Route',
+            'label' => 'Module Route',
             'required' => true,
             'choices' => $choices,
             'placeholder' => 'Select a route',
@@ -141,6 +138,9 @@ class TourGuideForm extends AbstractType
         $builder->add(static::FIELD_VERSION, IntegerType::class, [
             'label' => 'Version',
             'required' => true,
+            'attr' => [
+                'placeholder' => '1',
+            ],
             'constraints' => [
                 new NotBlank(),
                 new GreaterThanOrEqual(['value' => 1]),
