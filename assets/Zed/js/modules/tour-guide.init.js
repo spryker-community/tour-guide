@@ -534,7 +534,7 @@ export async function initTourGuide(input = 'default') {
         version = 1
     } = config;
 
-    const tour = new Shepherd.Tour({
+    const tour = new Tour({
         useModalOverlay: true,
         useHistory: true,
         defaultStepOptions: {

@@ -145,7 +145,8 @@
     transition: opacity .3s, visibility .3s;
     visibility: hidden;
     width: 100%;
-    z-index: 9999
+    z-index: 9999;
+    position: absolute;
 }
 
 .tour-enabled.tour-element {
@@ -230,6 +231,7 @@
 }
 
 .tour-modal-overlay-container {
+    background: black;
     height: 0;
     left: 0;
     opacity: 0;
@@ -259,7 +261,7 @@
 }
 
 .tour-enabled.tour-target {
-    border-radius: 2px;
+    border-radius: 10px;
     border-color: #ffffff;
     border-width: 1px;
     pointer-events: auto !important;
