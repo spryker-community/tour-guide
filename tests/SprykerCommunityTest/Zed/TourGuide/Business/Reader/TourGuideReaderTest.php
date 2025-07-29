@@ -9,13 +9,19 @@ declare(strict_types = 1);
 
 namespace SprykerCommunityTest\Zed\TourGuide\Business\Reader;
 
+use Generated\Shared\Transfer\AclGroupsTransfer;
+use Generated\Shared\Transfer\AclGroupTransfer;
+use Generated\Shared\Transfer\GroupTransfer;
 use Generated\Shared\Transfer\TourGuideCollectionTransfer;
 use Generated\Shared\Transfer\TourGuideCriteriaTransfer;
 use Generated\Shared\Transfer\TourGuideStepCollectionTransfer;
 use Generated\Shared\Transfer\TourGuideStepCriteriaTransfer;
 use Generated\Shared\Transfer\TourGuideStepTransfer;
 use Generated\Shared\Transfer\TourGuideTransfer;
+use Generated\Shared\Transfer\UserTransfer;
 use PHPUnit\Framework\TestCase;
+use Spryker\Zed\Acl\Business\AclFacadeInterface;
+use Spryker\Zed\User\Business\UserFacadeInterface;
 use SprykerCommunity\Zed\TourGuide\Business\Reader\TourGuideReader;
 use SprykerCommunity\Zed\TourGuide\Persistence\TourGuideRepositoryInterface;
 
@@ -36,7 +42,10 @@ final class TourGuideReaderTest extends TestCase
             ->with($tourGuideCriteriaTransfer)
             ->willReturn($expectedCollection);
 
-        $tourGuideReader = new TourGuideReader($tourGuideRepositoryMock);
+        $userFacadeMock = $this->createMock(UserFacadeInterface::class);
+        $aclFacadeMock = $this->createMock(AclFacadeInterface::class);
+
+        $tourGuideReader = new TourGuideReader($tourGuideRepositoryMock, $userFacadeMock, $aclFacadeMock);
 
         // Act
         $actualCollection = $tourGuideReader->getTourGuideCollection($tourGuideCriteriaTransfer);
@@ -60,7 +69,10 @@ final class TourGuideReaderTest extends TestCase
             ->with($idTourGuide)
             ->willReturn($expectedTransfer);
 
-        $tourGuideReader = new TourGuideReader($tourGuideRepositoryMock);
+        $userFacadeMock = $this->createMock(UserFacadeInterface::class);
+        $aclFacadeMock = $this->createMock(AclFacadeInterface::class);
+
+        $tourGuideReader = new TourGuideReader($tourGuideRepositoryMock, $userFacadeMock, $aclFacadeMock);
 
         // Act
         $actualTransfer = $tourGuideReader->findTourGuideById($idTourGuide);
@@ -83,7 +95,10 @@ final class TourGuideReaderTest extends TestCase
             ->with($idTourGuide)
             ->willReturn(null);
 
-        $tourGuideReader = new TourGuideReader($tourGuideRepositoryMock);
+        $userFacadeMock = $this->createMock(UserFacadeInterface::class);
+        $aclFacadeMock = $this->createMock(AclFacadeInterface::class);
+
+        $tourGuideReader = new TourGuideReader($tourGuideRepositoryMock, $userFacadeMock, $aclFacadeMock);
 
         // Act
         $actualTransfer = $tourGuideReader->findTourGuideById($idTourGuide);
@@ -95,11 +110,13 @@ final class TourGuideReaderTest extends TestCase
     /**
      * @return void
      */
-    public function testFindTourGuideByRouteReturnsTransferFromRepository(): void
+    public function testFindTourGuideByRouteReturnsTransferFromRepositoryWhenNoAclGroup(): void
     {
         // Arrange
         $route = '/test-route';
         $expectedTransfer = new TourGuideTransfer();
+        $expectedTransfer->setAclGroup(null);
+        $expectedTransfer->setFkAclGroup(null);
 
         $tourGuideRepositoryMock = $this->createMock(TourGuideRepositoryInterface::class);
         $tourGuideRepositoryMock->expects($this->once())
@@ -107,13 +124,117 @@ final class TourGuideReaderTest extends TestCase
             ->with($route)
             ->willReturn($expectedTransfer);
 
-        $tourGuideReader = new TourGuideReader($tourGuideRepositoryMock);
+        $userFacadeMock = $this->createMock(UserFacadeInterface::class);
+        $aclFacadeMock = $this->createMock(AclFacadeInterface::class);
+
+        // Setup user facade mock to return a user
+        $userTransfer = new UserTransfer();
+        $userTransfer->setIdUser(1);
+        $userFacadeMock->method('getCurrentUser')->willReturn($userTransfer);
+
+        // Setup acl facade mock
+        $aclGroupsTransfer = new AclGroupsTransfer();
+        $aclFacadeMock->method('getUserGroups')->willReturn($aclGroupsTransfer);
+
+        $tourGuideReader = new TourGuideReader($tourGuideRepositoryMock, $userFacadeMock, $aclFacadeMock);
 
         // Act
         $actualTransfer = $tourGuideReader->findTourGuideByRoute($route);
 
         // Assert
         $this->assertSame($expectedTransfer, $actualTransfer);
+    }
+
+    /**
+     * @return void
+     */
+    public function testFindTourGuideByRouteWithAclGroupReturnsTransferWhenUserHasAccess(): void
+    {
+        // Arrange
+        $route = '/test-route';
+        $aclGroupId = 1;
+        $userId = 1;
+
+        $expectedTransfer = new TourGuideTransfer();
+        $groupTransfer = new GroupTransfer();
+        $groupTransfer->setName('TestGroup');
+        $expectedTransfer->setAclGroup($groupTransfer);
+        $expectedTransfer->setFkAclGroup($aclGroupId);
+
+        $tourGuideRepositoryMock = $this->createMock(TourGuideRepositoryInterface::class);
+        $tourGuideRepositoryMock->expects($this->once())
+            ->method('findTourGuideByRoute')
+            ->with($route)
+            ->willReturn($expectedTransfer);
+
+        $userFacadeMock = $this->createMock(UserFacadeInterface::class);
+        $aclFacadeMock = $this->createMock(AclFacadeInterface::class);
+
+        // Setup user facade mock to return a user
+        $userTransfer = new UserTransfer();
+        $userTransfer->setIdUser($userId);
+        $userFacadeMock->method('getCurrentUser')->willReturn($userTransfer);
+
+        // Setup acl facade mock to return groups with matching ID
+        $aclGroupsTransfer = new AclGroupsTransfer();
+        $aclGroupTransfer = new AclGroupTransfer();
+        $aclGroupTransfer->setIdAclGroup($aclGroupId);
+        $aclGroupsTransfer->addGroup($aclGroupTransfer);
+        $aclFacadeMock->method('getUserGroups')->with($userId)->willReturn($aclGroupsTransfer);
+
+        $tourGuideReader = new TourGuideReader($tourGuideRepositoryMock, $userFacadeMock, $aclFacadeMock);
+
+        // Act
+        $actualTransfer = $tourGuideReader->findTourGuideByRoute($route);
+
+        // Assert
+        $this->assertSame($expectedTransfer, $actualTransfer);
+    }
+
+    /**
+     * @return void
+     */
+    public function testFindTourGuideByRouteWithAclGroupReturnsNullWhenUserDoesNotHaveAccess(): void
+    {
+        // Arrange
+        $route = '/test-route';
+        $aclGroupId = 1;
+        $userId = 1;
+
+        $tourGuideTransfer = new TourGuideTransfer();
+        $groupTransfer = new GroupTransfer();
+        $groupTransfer->setName('TestGroup');
+        $tourGuideTransfer->setAclGroup($groupTransfer);
+        $tourGuideTransfer->setFkAclGroup($aclGroupId);
+
+        $tourGuideRepositoryMock = $this->createMock(TourGuideRepositoryInterface::class);
+        $tourGuideRepositoryMock->expects($this->once())
+            ->method('findTourGuideByRoute')
+            ->with($route)
+            ->willReturn($tourGuideTransfer);
+
+        $userFacadeMock = $this->createMock(UserFacadeInterface::class);
+        $aclFacadeMock = $this->createMock(AclFacadeInterface::class);
+
+        // Setup user facade mock to return a user
+        $userTransfer = new UserTransfer();
+        $userTransfer->setIdUser($userId);
+        $userFacadeMock->method('getCurrentUser')->willReturn($userTransfer);
+
+        // Setup acl facade mock to return groups with non-matching ID
+        $aclGroupsTransfer = new AclGroupsTransfer();
+        $aclGroupTransfer = new AclGroupTransfer();
+        $aclGroupTransfer->setIdAclGroup(2); // Different from the tour guide's ACL group
+        $aclGroupsTransfer->addGroup($aclGroupTransfer);
+        $aclFacadeMock->method('getUserGroups')->with($userId)->willReturn($aclGroupsTransfer);
+
+        $tourGuideReader = new TourGuideReader($tourGuideRepositoryMock, $userFacadeMock, $aclFacadeMock);
+
+        // Act
+        $actualTransfer = $tourGuideReader->findTourGuideByRoute($route);
+
+        // Assert
+        $this->assertNull($actualTransfer);
     }
 
     /**
@@ -130,7 +251,10 @@ final class TourGuideReaderTest extends TestCase
             ->with($route)
             ->willReturn(null);
 
-        $tourGuideReader = new TourGuideReader($tourGuideRepositoryMock);
+        $userFacadeMock = $this->createMock(UserFacadeInterface::class);
+        $aclFacadeMock = $this->createMock(AclFacadeInterface::class);
+
+        $tourGuideReader = new TourGuideReader($tourGuideRepositoryMock, $userFacadeMock, $aclFacadeMock);
 
         // Act
         $actualTransfer = $tourGuideReader->findTourGuideByRoute($route);
@@ -154,7 +278,10 @@ final class TourGuideReaderTest extends TestCase
             ->with($tourGuideStepCriteriaTransfer)
             ->willReturn($expectedCollection);
 
-        $tourGuideReader = new TourGuideReader($tourGuideRepositoryMock);
+        $userFacadeMock = $this->createMock(UserFacadeInterface::class);
+        $aclFacadeMock = $this->createMock(AclFacadeInterface::class);
+
+        $tourGuideReader = new TourGuideReader($tourGuideRepositoryMock, $userFacadeMock, $aclFacadeMock);
 
         // Act
         $actualCollection = $tourGuideReader->getTourGuideStepCollection($tourGuideStepCriteriaTransfer);
@@ -178,7 +305,10 @@ final class TourGuideReaderTest extends TestCase
             ->with($idTourGuideStep)
             ->willReturn($expectedTransfer);
 
-        $tourGuideReader = new TourGuideReader($tourGuideRepositoryMock);
+        $userFacadeMock = $this->createMock(UserFacadeInterface::class);
+        $aclFacadeMock = $this->createMock(AclFacadeInterface::class);
+
+        $tourGuideReader = new TourGuideReader($tourGuideRepositoryMock, $userFacadeMock, $aclFacadeMock);
 
         // Act
         $actualTransfer = $tourGuideReader->findTourGuideStepById($idTourGuideStep);
@@ -201,7 +331,10 @@ final class TourGuideReaderTest extends TestCase
             ->with($idTourGuideStep)
             ->willReturn(null);
 
-        $tourGuideReader = new TourGuideReader($tourGuideRepositoryMock);
+        $userFacadeMock = $this->createMock(UserFacadeInterface::class);
+        $aclFacadeMock = $this->createMock(AclFacadeInterface::class);
+
+        $tourGuideReader = new TourGuideReader($tourGuideRepositoryMock, $userFacadeMock, $aclFacadeMock);
 
         // Act
         $actualTransfer = $tourGuideReader->findTourGuideStepById($idTourGuideStep);
@@ -225,7 +358,10 @@ final class TourGuideReaderTest extends TestCase
             ->with($route)
             ->willReturn($expectedCollection);
 
-        $tourGuideReader = new TourGuideReader($tourGuideRepositoryMock);
+        $userFacadeMock = $this->createMock(UserFacadeInterface::class);
+        $aclFacadeMock = $this->createMock(AclFacadeInterface::class);
+
+        $tourGuideReader = new TourGuideReader($tourGuideRepositoryMock, $userFacadeMock, $aclFacadeMock);
 
         // Act
         $actualCollection = $tourGuideReader->getTourGuideStepsByRoute($route);
@@ -249,7 +385,10 @@ final class TourGuideReaderTest extends TestCase
             ->with($idTourGuide)
             ->willReturn($expectedCollection);
 
-        $tourGuideReader = new TourGuideReader($tourGuideRepositoryMock);
+        $userFacadeMock = $this->createMock(UserFacadeInterface::class);
+        $aclFacadeMock = $this->createMock(AclFacadeInterface::class);
+
+        $tourGuideReader = new TourGuideReader($tourGuideRepositoryMock, $userFacadeMock, $aclFacadeMock);
 
         // Act
         $actualCollection = $tourGuideReader->getTourGuideStepsByTourGuideId($idTourGuide);

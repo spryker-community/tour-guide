@@ -138,7 +138,9 @@ vendor/bin/console application:build-navigation-cache
 
 ## Screenshot
 
-![Guided Tours for Back Office](guided_tours.png)
+![Create a tour](img/tour_guide_1.png)
+
+![Show a guided tour](img/tour_guide_2.png)
 
 ## License
 

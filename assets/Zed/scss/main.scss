@@ -1,4 +1,4 @@
-.shepherd-button {
+.tour-button {
     background: #11856e;
     border: 1px solid #ffffff;
     border-radius: 3px;
@@ -9,25 +9,25 @@
     transition: all .5s ease
 }
 
-.shepherd-button:not(:disabled):hover {
+.tour-button:not(:disabled):hover {
     box-shadow: 0 4px 12px 0 rgba(0, 0, 0, .15);
 }
 
-.shepherd-button.shepherd-button-secondary {
+.tour-button.tour-button-secondary {
     background: #f1f2f3;
     color: rgba(0, 0, 0, .75)
 }
 
-.shepherd-button.shepherd-button-secondary:not(:disabled):hover {
+.tour-button.tour-button-secondary:not(:disabled):hover {
     background: #d6d9db;
     color: rgba(0, 0, 0, .75)
 }
 
-.shepherd-button:disabled {
+.tour-button:disabled {
     cursor: not-allowed
 }
 
-.shepherd-footer {
+.tour-footer {
     border-bottom-left-radius: 5px;
     border-bottom-right-radius: 5px;
     display: flex;
@@ -51,11 +51,11 @@
     background: #d6d9db;
 }
 
-.shepherd-footer .shepherd-button:last-child {
+.tour-footer .tour-button:last-child {
     margin-right: 0
 }
 
-.shepherd-cancel-icon {
+.tour-cancel-icon {
     background: transparent;
     border: none;
     color: #333;
@@ -64,22 +64,26 @@
     font-weight: 400;
     margin: 0;
     padding: 0;
-    transition: color .5s ease
+    transition: color .5s ease;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 1;
 }
 
-.shepherd-cancel-icon:hover {
+.tour-cancel-icon:hover {
     color: rgba(0, 0, 0, .75)
 }
 
-.shepherd-has-title .shepherd-content .shepherd-cancel-icon {
+.tour-has-title .tour-content .tour-cancel-icon {
     color: #333;
 }
 
-.shepherd-has-title .shepherd-content .shepherd-cancel-icon:hover {
+.tour-has-title .tour-content .tour-cancel-icon:hover {
     color: rgba(0, 0, 0, .75)
 }
 
-.shepherd-title {
+.tour-title {
     color: #333333;
     display: flex;
     flex: 1 0 auto;
@@ -90,22 +94,23 @@
     text-transform: uppercase;
 }
 
-.shepherd-header {
+.tour-header {
     align-items: center;
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
     display: flex;
     justify-content: flex-end;
     line-height: 2em;
-    padding: .75rem .75rem 0
+    padding: .75rem .75rem 0;
+    position: relative;
 }
 
-.shepherd-has-title .shepherd-content .shepherd-header {
+.tour-has-title .tour-content .tour-header {
     background: #eeeeee;
     padding: 1em
 }
 
-.shepherd-text {
+.tour-text {
     color: #333333;
     font-size: 1.2rem;
     line-height: 1.3em;
@@ -113,21 +118,21 @@
     background: #ffffff;
 }
 
-.shepherd-text p {
+.tour-text p {
     margin-top: 0
 }
 
-.shepherd-text p:last-child {
+.tour-text p:last-child {
     margin-bottom: 0
 }
 
-.shepherd-content {
+.tour-content {
     border-radius: 5px;
     outline: none;
     padding: 0
 }
 
-.shepherd-element {
+.tour-element {
     background: #fff;
     border: none;
     border-radius: 5px;
@@ -143,35 +148,36 @@
     z-index: 9999
 }
 
-.shepherd-enabled.shepherd-element {
+.tour-enabled.tour-element {
     opacity: 1;
     visibility: visible
 }
 
-.shepherd-element[data-popper-reference-hidden]:not(.shepherd-centered) {
+.tour-element[data-popper-reference-hidden]:not(.tour-centered) {
     opacity: 0;
     pointer-events: none;
     visibility: hidden
 }
 
-.shepherd-element, .shepherd-element *, .shepherd-element :after, .shepherd-element :before {
+.tour-element, .tour-element *, .tour-element :after, .tour-element :before {
     box-sizing: border-box
 }
 
-.shepherd-arrow, .shepherd-arrow:before {
+.tour-arrow, .tour-arrow:before {
     height: 16px;
     position: absolute;
     width: 16px;
     z-index: -1
 }
 
-.shepherd-arrow:before {
+.tour-arrow:before {
     box-shadow: 2px -2px 6px #333333;
     background: #ffffff;
     content: "";
     transform: rotate(45deg)
 }
 
+<<<<<<< Updated upstream
 .shepherd-element[data-popper-placement^=top] > .shepherd-arrow {
     bottom: -8px
 }
@@ -186,21 +192,65 @@
 
 .shepherd-element[data-popper-placement^=right] > .shepherd-arrow {
     left: -8px
+=======
+.tour-element[data-popper-placement^=top] > .tour-arrow {
+    bottom: -8px;
+    left: 50%;
+    transform: translateX(-50%);
 }
 
-.shepherd-element.shepherd-centered > .shepherd-arrow {
+.tour-element[data-popper-placement^=bottom] > .tour-arrow {
+    top: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.tour-element[data-popper-placement^=left] > .tour-arrow {
+    right: -8px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.tour-element[data-popper-placement^=right] > .tour-arrow {
+    left: -8px;
+    top: 50%;
+    transform: translateY(-50%);
+>>>>>>> Stashed changes
+}
+
+.tour-element.tour-centered > .tour-arrow {
     opacity: 0
 }
 
-.shepherd-element.shepherd-has-title[data-popper-placement^=bottom] > .shepherd-arrow:before {
+.tour-element.tour-has-title[data-popper-placement^=bottom] > .tour-arrow:before {
     background-color: #eeeeee;
 }
 
+<<<<<<< Updated upstream
 .shepherd-target-click-disabled.shepherd-enabled.shepherd-target, .shepherd-target-click-disabled.shepherd-enabled.shepherd-target * {
+=======
+.tour-element[data-popper-placement^=top] > .tour-arrow:before {
+    bottom: 0;
+}
+
+.tour-element[data-popper-placement^=bottom] > .tour-arrow:before {
+    top: 0;
+}
+
+.tour-element[data-popper-placement^=left] > .tour-arrow:before {
+    right: 0;
+}
+
+.tour-element[data-popper-placement^=right] > .tour-arrow:before {
+    left: 0;
+}
+
+.tour-target-click-disabled.tour-enabled.tour-target, .tour-target-click-disabled.tour-enabled.tour-target * {
+>>>>>>> Stashed changes
     pointer-events: none
 }
 
-.shepherd-modal-overlay-container {
+.tour-modal-overlay-container {
     height: 0;
     left: 0;
     opacity: 0;
@@ -213,17 +263,34 @@
     z-index: 9997
 }
 
-.shepherd-modal-overlay-container.shepherd-modal-is-visible {
+.tour-modal-overlay-container.tour-modal-is-visible {
     height: 100vh;
     opacity: .4;
     transform: translateZ(0);
     transition: all .3s ease-out, height 0s 0s, opacity .3s 0s
 }
 
-.shepherd-modal-overlay-container.shepherd-modal-is-visible path {
+.tour-modal-overlay-container.tour-modal-is-visible path {
     pointer-events: all
 }
 
+<<<<<<< Updated upstream
+=======
+.tour-target {
+    position: relative;
+    z-index: 9998 !important;
+}
+
+.tour-enabled.tour-target {
+    border-radius: 2px;
+    border-color: #ffffff;
+    border-width: 1px;
+    pointer-events: auto !important;
+    position: relative;
+    z-index: 9998 !important;
+}
+
+>>>>>>> Stashed changes
 #tour-start-button {
     position: absolute;
     right: 15px;

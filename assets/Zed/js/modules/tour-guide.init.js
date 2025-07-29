@@ -1,4 +1,374 @@
+<<<<<<< Updated upstream
 import Shepherd from 'shepherd.js';
+=======
+/**
+ * Custom Tour implementation to replace Shepherd.js
+ */
+class Tour {
+    constructor(options = {}) {
+        this.options = options;
+        this.steps = [];
+        this.currentStep = null;
+        this.currentStepIndex = -1;
+        this.events = {};
+        this.pausedStepId = null;
+        this.currentTargetElement = null;
+        this.modalOverlay = document.createElement('div');
+        this.modalOverlay.className = 'tour-modal-overlay-container';
+
+        document.body.appendChild(this.modalOverlay);
+    }
+
+    /**
+     * Add a step to the tour
+     * @param {Object} options - Step options
+     */
+    addStep(options) {
+        const mergedOptions = this.options.defaultStepOptions
+            ? { ...this.options.defaultStepOptions, ...options }
+            : options;
+
+        const step = {
+            id: this.steps.length,
+            options: mergedOptions,
+            tour: this,
+            isOpen: false,
+            element: null
+        };
+
+        this.steps.push(step);
+        return step;
+    }
+
+    /**
+     * Start the tour
+     */
+    start() {
+        this.trigger('start');
+        if (this.steps.length > 0) {
+            this.show(0);
+        }
+    }
+
+    /**
+     * Show a specific step
+     * @param {number} stepId - The step ID to show
+     */
+    show(stepId) {
+        const stepIndex = typeof stepId === 'number' ? stepId : parseInt(stepId, 10);
+        if (stepIndex < 0 || stepIndex >= this.steps.length) {
+            return;
+        }
+
+        if (this.options.useModalOverlay) {
+            this.modalOverlay.classList.add('tour-modal-is-visible');
+        }
+
+        if (this.currentStep) {
+            this.hideStep(this.currentStep);
+        }
+
+        this.currentStepIndex = stepIndex;
+        this.currentStep = this.steps[stepIndex];
+        this.showStep(this.currentStep);
+        this.trigger('show', this.currentStep);
+    }
+
+    /**
+     * Hide the tour
+     */
+    hide() {
+        if (this.currentStep) {
+            this.hideStep(this.currentStep);
+            this.currentStep = null;
+        }
+        this.modalOverlay.classList.remove('tour-modal-is-visible');
+    }
+
+    /**
+     * Go to the next step
+     */
+    next() {
+        if (this.currentStepIndex < this.steps.length - 1) {
+            this.show(this.currentStepIndex + 1);
+        }
+    }
+
+    /**
+     * Go to the previous step
+     */
+    back() {
+        if (this.currentStepIndex > 0) {
+            this.show(this.currentStepIndex - 1);
+        }
+    }
+
+    /**
+     * Complete the tour
+     */
+    complete() {
+        this.hide();
+        this.trigger('complete');
+    }
+
+    /**
+     * Cancel the tour
+     */
+    cancel() {
+        this.hide();
+        this.trigger('cancel');
+    }
+
+    /**
+     * Get the current step
+     * @returns {Object} The current step
+     */
+    getCurrentStep() {
+        return this.currentStep;
+    }
+
+    /**
+     * Register an event handler
+     * @param {string} event - Event name
+     * @param {Function} handler - Event handler
+     */
+    on(event, handler) {
+        if (!this.events[event]) {
+            this.events[event] = [];
+        }
+        this.events[event].push(handler);
+    }
+
+    /**
+     * Trigger an event
+     * @param {string} event - Event name
+     * @param {...any} args - Event arguments
+     */
+    trigger(event, ...args) {
+        if (this.events[event]) {
+            this.events[event].forEach(handler => handler(...args));
+        }
+    }
+
+    /**
+     * Show a step
+     * @param {Object} step - The step to show
+     */
+    async showStep(step) {
+        if (!step.element) {
+            step.element = this.createStepElement(step);
+            document.body.appendChild(step.element);
+        }
+
+        await this.positionStep(step);
+
+        step.element.classList.add('tour-enabled');
+        step.isOpen = true;
+    }
+
+    /**
+     * Highlight the target element
+     * @param {HTMLElement} targetElement - The element to highlight
+     */
+    highlightTargetElement(targetElement) {
+        if (targetElement) {
+            this.unhighlightTargetElement();
+
+            targetElement.classList.add('tour-target');
+            targetElement.classList.add('tour-enabled');
+
+            this.currentTargetElement = targetElement;
+        }
+    }
+
+    /**
+     * Remove highlight from the current target element
+     */
+    unhighlightTargetElement() {
+        if (this.currentTargetElement) {
+            this.currentTargetElement.classList.remove('tour-target');
+            this.currentTargetElement.classList.remove('tour-enabled');
+            this.currentTargetElement = null;
+        }
+    }
+
+    /**
+     * Hide a step
+     * @param {Object} step - The step to hide
+     */
+    hideStep(step) {
+        if (step.element) {
+            step.element.classList.remove('tour-enabled');
+            step.isOpen = false;
+        }
+
+        this.unhighlightTargetElement();
+    }
+
+    /**
+     * Create a step element
+     * @param {Object} step - The step
+     * @returns {HTMLElement} The step element
+     */
+    createStepElement(step) {
+        const { options } = step;
+        const element = document.createElement('div');
+        element.className = 'tour-element';
+
+        if (options.classes) {
+            options.classes.split(' ').forEach(className => {
+                element.classList.add(className);
+            });
+        }
+
+        const content = document.createElement('div');
+        content.className = 'tour-content';
+        element.appendChild(content);
+
+        const header = document.createElement('div');
+        header.className = 'tour-header';
+        content.appendChild(header);
+
+        if (options.title) {
+            element.classList.add('tour-has-title');
+
+            const title = document.createElement('h3');
+            title.className = 'tour-title';
+            title.textContent = options.title;
+            header.appendChild(title);
+        }
+
+        if (options.cancelIcon && options.cancelIcon.enabled) {
+            const cancelButton = document.createElement('button');
+            cancelButton.className = 'tour-cancel-icon';
+            cancelButton.innerHTML = '&times;';
+            cancelButton.addEventListener('click', () => this.cancel());
+            header.appendChild(cancelButton);
+        }
+
+        if (options.text) {
+            const text = document.createElement('div');
+            text.className = 'tour-text';
+            text.innerHTML = options.text;
+            content.appendChild(text);
+        }
+
+        if (options.buttons && options.buttons.length > 0) {
+            const footer = document.createElement('div');
+            footer.className = 'tour-footer';
+            content.appendChild(footer);
+
+            options.buttons.forEach(buttonConfig => {
+                const button = document.createElement('button');
+                button.className = 'tour-button';
+                if (buttonConfig.classes) {
+                    buttonConfig.classes.split(' ').forEach(className => {
+                        button.classList.add(className);
+                    });
+                }
+                button.textContent = buttonConfig.text;
+                button.addEventListener('click', () => {
+                    if (typeof buttonConfig.action === 'function') {
+                        buttonConfig.action.call(this);
+                    }
+                });
+                footer.appendChild(button);
+            });
+        }
+
+        const arrow = document.createElement('div');
+        arrow.className = 'tour-arrow';
+        element.appendChild(arrow);
+
+        return element;
+    }
+
+    /**
+     * Position a step relative to its target element
+     * @param {Object} step - The step to position
+     */
+    async positionStep(step) {
+        const { options } = step;
+
+        if (options.beforeShowPromise) {
+            await options.beforeShowPromise(step);
+        }
+
+        if (options.attachTo && options.attachTo.element) {
+            const targetElement = document.querySelector(options.attachTo.element);
+            if (targetElement) {
+                this.highlightTargetElement(targetElement);
+
+                const position = options.attachTo.on || 'bottom';
+                this.positionElementToTarget(step.element, targetElement, position);
+
+                if (options.scrollTo) {
+                    targetElement.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'center'
+                    });
+                }
+            }
+        } else {
+            this.centerStep(step.element);
+        }
+    }
+
+    /**
+     * Position an element relative to a target
+     * @param {HTMLElement} element - The element to position
+     * @param {HTMLElement} target - The target element
+     * @param {string} position - The position (top, bottom, left, right)
+     */
+    positionElementToTarget(element, target, position) {
+        const targetRect = target.getBoundingClientRect();
+        const elementRect = element.getBoundingClientRect();
+
+        element.setAttribute('data-popper-placement', position);
+
+        let top, left;
+
+        switch (position) {
+            case 'top':
+                top = targetRect.top - elementRect.height - 16;
+                left = targetRect.left + (targetRect.width / 2) - (elementRect.width / 2);
+                break;
+            case 'bottom':
+                top = targetRect.bottom + 16;
+                left = targetRect.left + (targetRect.width / 2) - (elementRect.width / 2);
+                break;
+            case 'left':
+                top = targetRect.top + (targetRect.height / 2) - (elementRect.height / 2);
+                left = targetRect.left - elementRect.width - 16;
+                break;
+            case 'right':
+                top = targetRect.top + (targetRect.height / 2) - (elementRect.height / 2);
+                left = targetRect.right + 16;
+                break;
+            default:
+                top = targetRect.bottom + 16;
+                left = targetRect.left + (targetRect.width / 2) - (elementRect.width / 2);
+        }
+
+        top += window.scrollY;
+        left += window.scrollX;
+
+        element.style.top = `${top}px`;
+        element.style.left = `${left}px`;
+    }
+
+    /**
+     * Center a step in the viewport
+     * @param {HTMLElement} element - The element to center
+     */
+    centerStep(element) {
+        element.classList.add('tour-centered');
+        element.style.top = '50%';
+        element.style.left = '50%';
+        element.style.transform = 'translate(-50%, -50%)';
+    }
+}
+>>>>>>> Stashed changes
 
 async function loadTourConfig(route) {
     try {
@@ -22,14 +392,15 @@ async function loadTourConfig(route) {
 
 async function trackTourEvent(idTourGuide, eventType, tourVersion) {
     try {
-        const response = await fetch(`/tour-guide/event/${eventType}`, {
+        const response = await fetch(`/tour-guide/event/track`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
             },
             body: new URLSearchParams({
                 idTourGuide: idTourGuide,
-                tourVersion: tourVersion
+                tourVersion: tourVersion,
+                eventName: eventType
             })
         });
 
@@ -53,7 +424,7 @@ function createPauseButton(tour, route, version) {
 
     const addPauseButtonToFooter = () => {
         setTimeout(() => {
-            const footers = document.querySelectorAll('.shepherd-footer');
+            const footers = document.querySelectorAll('.tour-footer');
 
             if (footers.length > 0) {
                 const currentFooter = footers[footers.length - 1];
@@ -175,7 +546,7 @@ export async function initTourGuide(input = 'default') {
         useHistory: true,
         defaultStepOptions: {
             cancelIcon: {enabled: true},
-            classes: 'shepherd-theme-default',
+            classes: 'tour-theme-default',
             scrollTo: true,
             ...defaultStepOptions,
             beforeShowPromise: function(step) {
@@ -201,7 +572,7 @@ export async function initTourGuide(input = 'default') {
         if (!isFirstStep) {
             buttons.push({
                 text: 'Back',
-                classes: 'shepherd-button-secondary',
+                classes: 'tour-button-secondary',
                 action: tour.back
             });
         }
@@ -209,13 +580,13 @@ export async function initTourGuide(input = 'default') {
         if (!isLastStep) {
             buttons.push({
                 text: 'Next',
-                classes: 'shepherd-button-primary',
+                classes: 'tour-button-primary',
                 action: tour.next
             });
         } else {
             buttons.push({
                 text: 'Finish',
-                classes: 'shepherd-button-primary',
+                classes: 'tour-button-primary',
                 action: tour.complete
             });
         }
@@ -240,7 +611,7 @@ export async function initTourGuide(input = 'default') {
         localStorage.setItem(storageKey, 'true');
         localStorage.removeItem(`tourPaused_${route}_v${version}`);
         if (window.tourConfig && window.tourConfig.idTourGuide) {
-            trackTourEvent(window.tourConfig.idTourGuide, 'finish', version);
+            trackTourEvent(window.tourConfig.idTourGuide, 'cancel', version);
         }
     });
 
@@ -259,7 +630,6 @@ export async function initTourGuide(input = 'default') {
         tour.pausedStepId = pausedStepId;
     }
 
-    // Add the tour start button to the footer when a tour is available
     createTourStartButton(route, version);
 
     return !localStorage.getItem(storageKey);
@@ -324,11 +694,9 @@ export async function autoStartTourGuide(config) {
     const isPaused = localStorage.getItem(pausedStepKey);
     const isNotCompleted = !localStorage.getItem(storageKey);
 
-    // Always initialize the tour to make the start button available
     await waitForPageLoad();
     await initTourGuide(config);
 
-    // Only auto-start the tour if it's paused or not completed
     if (isPaused || isNotCompleted) {
         if (window.shepherdTour) {
             window.shepherdTour.start();
