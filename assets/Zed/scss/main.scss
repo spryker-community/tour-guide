@@ -177,22 +177,6 @@
     transform: rotate(45deg)
 }
 
-<<<<<<< Updated upstream
-.shepherd-element[data-popper-placement^=top] > .shepherd-arrow {
-    bottom: -8px
-}
-
-.shepherd-element[data-popper-placement^=bottom] > .shepherd-arrow {
-    top: -8px
-}
-
-.shepherd-element[data-popper-placement^=left] > .shepherd-arrow {
-    right: -8px
-}
-
-.shepherd-element[data-popper-placement^=right] > .shepherd-arrow {
-    left: -8px
-=======
 .tour-element[data-popper-placement^=top] > .tour-arrow {
     bottom: -8px;
     left: 50%;
@@ -215,7 +199,6 @@
     left: -8px;
     top: 50%;
     transform: translateY(-50%);
->>>>>>> Stashed changes
 }
 
 .tour-element.tour-centered > .tour-arrow {
@@ -226,9 +209,6 @@
     background-color: #eeeeee;
 }
 
-<<<<<<< Updated upstream
-.shepherd-target-click-disabled.shepherd-enabled.shepherd-target, .shepherd-target-click-disabled.shepherd-enabled.shepherd-target * {
-=======
 .tour-element[data-popper-placement^=top] > .tour-arrow:before {
     bottom: 0;
 }
@@ -246,7 +226,6 @@
 }
 
 .tour-target-click-disabled.tour-enabled.tour-target, .tour-target-click-disabled.tour-enabled.tour-target * {
->>>>>>> Stashed changes
     pointer-events: none
 }
 
@@ -274,8 +253,6 @@
     pointer-events: all
 }
 
-<<<<<<< Updated upstream
-=======
 .tour-target {
     position: relative;
     z-index: 9998 !important;
@@ -290,7 +267,6 @@
     z-index: 9998 !important;
 }
 
->>>>>>> Stashed changes
 #tour-start-button {
     position: absolute;
     right: 15px;
