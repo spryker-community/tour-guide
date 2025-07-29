@@ -4,11 +4,13 @@ A Spryker module for creating and managing guided tours through your application
 
 ## Features
 
-- Create and manage tour guides for different sections of your application
-- Define multiple steps for each tour guide with customizable content
-- Associate tour guides with specific routes in your application
-- Retrieve tour guides and steps based on various criteria
-- Easily integrate with existing Spryker applications
+- Create and manage tours for different Backoffice modules
+- Define multiple steps for each tour with customizable content
+- Assign tours to different user groups
+- Adjust order of steps at any time
+- Each tour can be paused, canceled or closed
+- Restart tour at any time from footer navigation item
+- Analyze tour events via Backoffice
 
 ## Installation
 
