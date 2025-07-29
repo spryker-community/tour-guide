@@ -142,6 +142,8 @@ vendor/bin/console application:build-navigation-cache
 
 ![Create a tour](img/tour_guide_1.png)
 
+---
+
 ![Show a guided tour](img/tour_guide_2.png)
 
 ## License
