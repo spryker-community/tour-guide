@@ -84,7 +84,6 @@ const api = require('@spryker/oryx-for-zed/lib');
 const build = require('@spryker/oryx-for-zed/lib/build');
 const copyAssetsCallback = require('@spryker/oryx-for-zed/lib/copy');
 
-// Add the OMS Visualizer package to the build process
 oryxForZed.settings.entry.dirs.push(path.resolve('./vendor/spryker-community'));
 
 api.getConfiguration(oryxForZed.settings)
