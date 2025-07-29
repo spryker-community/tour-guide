@@ -1,9 +1,3 @@
-<<<<<<< Updated upstream
-import Shepherd from 'shepherd.js';
-=======
-/**
- * Custom Tour implementation to replace Shepherd.js
- */
 class Tour {
     constructor(options = {}) {
         this.options = options;
@@ -368,7 +362,6 @@ class Tour {
         element.style.transform = 'translate(-50%, -50%)';
     }
 }
->>>>>>> Stashed changes
 
 async function loadTourConfig(route) {
     try {
@@ -508,8 +501,8 @@ function createTourStartButton(route, version = 1) {
             startButton.title = 'Start Guided Tour';
 
             startButton.addEventListener('click', () => {
-                if (window.shepherdTour) {
-                    window.shepherdTour.start();
+                if (window.guidedTour) {
+                    window.guidedTour.start();
                 } else {
                     restartTour(route, version);
                 }
@@ -623,7 +616,7 @@ export async function initTourGuide(input = 'default') {
         }
     });
 
-    window.shepherdTour = tour;
+    window.guidedTour = tour;
 
     const pausedStepId = localStorage.getItem(`tourPaused_${route}_v${version}`);
     if (pausedStepId) {
@@ -640,8 +633,8 @@ function restartTour(route, version = 1) {
     localStorage.removeItem(`tourCompleted_${route}_v${version}`);
     if (window.initTourGuide) {
         window.initTourGuide(route).then(() => {
-            if (window.shepherdTour) {
-                window.shepherdTour.start();
+            if (window.guidedTour) {
+                window.guidedTour.start();
             }
         });
     }
@@ -698,13 +691,13 @@ export async function autoStartTourGuide(config) {
     await initTourGuide(config);
 
     if (isPaused || isNotCompleted) {
-        if (window.shepherdTour) {
-            window.shepherdTour.start();
+        if (window.guidedTour) {
+            window.guidedTour.start();
 
-            if (isPaused && window.shepherdTour.pausedStepId) {
+            if (isPaused && window.guidedTour.pausedStepId) {
                 try {
-                    const stepId = parseInt(window.shepherdTour.pausedStepId, 10);
-                    window.shepherdTour.show(stepId);
+                    const stepId = parseInt(window.guidedTour.pausedStepId, 10);
+                    window.guidedTour.show(stepId);
                     localStorage.removeItem(pausedStepKey);
                 } catch (e) {
                     console.error('Error resuming tour from paused step:', e);

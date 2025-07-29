@@ -21,10 +21,19 @@ A Spryker module for creating and managing guided tours through your application
 
 ### 1. Install Package
 
+Add repository to your `composer.json`:
+
+```
+{
+    "type": "git",
+    "url": "https://github.com/spryker-community/quest-2107-guided-tour-feature.git"
+}
+```
+
 Install the package via Composer:
 
 ```bash
-composer require spryker-community/tour-guide
+composer require spryker-community/quest-2107-guided-tour-feature:dev-main
 ```
 
 ### 2. Integrate ZED Controller
@@ -64,13 +73,7 @@ The OMS Visualizer uses Mermaid JS for graph visualization. Follow these steps t
 ],
 ```
 
-2. Install all JavaScript dependencies from the `/vendor/spryker-community` directory and compile them for use in your Zed application:
-
-```bash
-npm install
-```
-
-3. Create a new file at `./frontend/zed/build.js` with the following content:
+2. Create a new file at `./frontend/zed/build.js` with the following content:
 
 ```javascript
 'use strict';
@@ -89,7 +92,7 @@ api.getConfiguration(oryxForZed.settings)
     .catch((error) => console.error('An error occurred while creating configuration', error));
 ```
 
-4. Update your project's `package.json` file to include your `./frontend/zed/build.js` as build script:
+3. Update your project's `package.json` file to include your `./frontend/zed/build.js` as build script:
 
 ```
 "scripts": {
@@ -100,7 +103,7 @@ api.getConfiguration(oryxForZed.settings)
 
 Note: Replace "other-scripts" with your existing script entries.
 
-5. Run the build command to install and compile the frontend assets:
+4. Run the build command to install and compile the frontend assets:
 
 ```bash
 npm run zed
