@@ -1,4 +1,4 @@
-# Tour Guide
+# Spryker Tour Guide for Backoffice
 
 A Spryker module for creating and managing guided tours through your application. This module helps onboard new users and guide them through complex workflows by providing step-by-step instructions directly within the application interface.
 
