@@ -22,13 +22,15 @@ use SprykerCommunity\Zed\TourGuide\Persistence\TourGuideRepositoryInterface;
 class TourGuideReader implements TourGuideReaderInterface
 {
     protected TourGuideRepositoryInterface $tourGuideRepository;
+    
     protected UserFacadeInterface $userFacade;
+    
     protected AclFacadeInterface $aclFacade;
 
     public function __construct(
         TourGuideRepositoryInterface $tourGuideRepository,
         UserFacadeInterface $userFacade,
-        AclFacadeInterface $aclFacade
+        AclFacadeInterface $aclFacade,
     ) {
         $this->tourGuideRepository = $tourGuideRepository;
         $this->userFacade = $userFacade;
