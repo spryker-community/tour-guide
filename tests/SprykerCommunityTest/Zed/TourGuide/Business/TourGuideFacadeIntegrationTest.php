@@ -9,13 +9,17 @@ declare(strict_types = 1);
 
 namespace SprykerCommunityTest\Zed\TourGuide\Business;
 
+use Generated\Shared\Transfer\AclGroupsTransfer;
 use Generated\Shared\Transfer\TourGuideCollectionTransfer;
 use Generated\Shared\Transfer\TourGuideCriteriaTransfer;
 use Generated\Shared\Transfer\TourGuideStepCollectionTransfer;
 use Generated\Shared\Transfer\TourGuideStepTransfer;
 use Generated\Shared\Transfer\TourGuideTransfer;
+use Generated\Shared\Transfer\UserTransfer;
 use PHPUnit\Framework\TestCase;
 use ReflectionProperty;
+use Spryker\Zed\Acl\Business\AclFacadeInterface;
+use Spryker\Zed\User\Business\UserFacadeInterface;
 use SprykerCommunity\Zed\TourGuide\Business\Reader\TourGuideReader;
 use SprykerCommunity\Zed\TourGuide\Business\TourGuideFacade;
 use SprykerCommunity\Zed\TourGuide\Business\Writer\TourGuideWriter;
@@ -68,8 +72,19 @@ final class TourGuideFacadeIntegrationTest extends TestCase
             ->with($this->equalTo($tourGuideTransfer))
             ->willReturn($createdTourGuideTransfer);
 
-        // Create reader with mocked repository
-        $tourGuideReader = new TourGuideReader($repositoryMock);
+        // Create user facade mock
+        $userFacadeMock = $this->createMock(UserFacadeInterface::class);
+        $userTransfer = new UserTransfer();
+        $userTransfer->setIdUser(1);
+        $userFacadeMock->method('getCurrentUser')->willReturn($userTransfer);
+
+        // Create acl facade mock
+        $aclFacadeMock = $this->createMock(AclFacadeInterface::class);
+        $aclGroupsTransfer = new AclGroupsTransfer();
+        $aclFacadeMock->method('getUserGroups')->willReturn($aclGroupsTransfer);
+
+        // Create reader with mocked repository, user facade, and acl facade
+        $tourGuideReader = new TourGuideReader($repositoryMock, $userFacadeMock, $aclFacadeMock);
 
         // Create writer with mocked entity manager and repository
         $tourGuideWriter = new TourGuideWriter($entityManagerMock, $repositoryMock);
@@ -142,8 +157,19 @@ final class TourGuideFacadeIntegrationTest extends TestCase
         // Create entity manager mock
         $entityManagerMock = $this->createMock(TourGuideEntityManagerInterface::class);
 
-        // Create reader with mocked repository
-        $tourGuideReader = new TourGuideReader($repositoryMock);
+        // Create user facade mock
+        $userFacadeMock = $this->createMock(UserFacadeInterface::class);
+        $userTransfer = new UserTransfer();
+        $userTransfer->setIdUser(1);
+        $userFacadeMock->method('getCurrentUser')->willReturn($userTransfer);
+
+        // Create acl facade mock
+        $aclFacadeMock = $this->createMock(AclFacadeInterface::class);
+        $aclGroupsTransfer = new AclGroupsTransfer();
+        $aclFacadeMock->method('getUserGroups')->willReturn($aclGroupsTransfer);
+
+        // Create reader with mocked repository, user facade, and acl facade
+        $tourGuideReader = new TourGuideReader($repositoryMock, $userFacadeMock, $aclFacadeMock);
 
         // Create writer with mocked entity manager and repository
         $tourGuideWriter = new TourGuideWriter($entityManagerMock, $repositoryMock);
@@ -216,8 +242,19 @@ final class TourGuideFacadeIntegrationTest extends TestCase
         // Create entity manager mock
         $entityManagerMock = $this->createMock(TourGuideEntityManagerInterface::class);
 
-        // Create reader with mocked repository
-        $tourGuideReader = new TourGuideReader($repositoryMock);
+        // Create user facade mock
+        $userFacadeMock = $this->createMock(UserFacadeInterface::class);
+        $userTransfer = new UserTransfer();
+        $userTransfer->setIdUser(1);
+        $userFacadeMock->method('getCurrentUser')->willReturn($userTransfer);
+
+        // Create acl facade mock
+        $aclFacadeMock = $this->createMock(AclFacadeInterface::class);
+        $aclGroupsTransfer = new AclGroupsTransfer();
+        $aclFacadeMock->method('getUserGroups')->willReturn($aclGroupsTransfer);
+
+        // Create reader with mocked repository, user facade, and acl facade
+        $tourGuideReader = new TourGuideReader($repositoryMock, $userFacadeMock, $aclFacadeMock);
 
         // Create writer with mocked entity manager and repository
         $tourGuideWriter = new TourGuideWriter($entityManagerMock, $repositoryMock);
@@ -314,8 +351,19 @@ final class TourGuideFacadeIntegrationTest extends TestCase
                 return null;
             });
 
-        // Create reader with mocked repository
-        $tourGuideReader = new TourGuideReader($repositoryMock);
+        // Create user facade mock
+        $userFacadeMock = $this->createMock(UserFacadeInterface::class);
+        $userTransfer = new UserTransfer();
+        $userTransfer->setIdUser(1);
+        $userFacadeMock->method('getCurrentUser')->willReturn($userTransfer);
+
+        // Create acl facade mock
+        $aclFacadeMock = $this->createMock(AclFacadeInterface::class);
+        $aclGroupsTransfer = new AclGroupsTransfer();
+        $aclFacadeMock->method('getUserGroups')->willReturn($aclGroupsTransfer);
+
+        // Create reader with mocked repository, user facade, and acl facade
+        $tourGuideReader = new TourGuideReader($repositoryMock, $userFacadeMock, $aclFacadeMock);
 
         // Create writer with mocked entity manager and repository
         $tourGuideWriter = new TourGuideWriter($entityManagerMock, $repositoryMock);
@@ -393,8 +441,19 @@ final class TourGuideFacadeIntegrationTest extends TestCase
             ->with($this->equalTo($idTourGuideStep))
             ->willReturn(true);
 
-        // Create reader with mocked repository
-        $tourGuideReader = new TourGuideReader($repositoryMock);
+        // Create user facade mock
+        $userFacadeMock = $this->createMock(UserFacadeInterface::class);
+        $userTransfer = new UserTransfer();
+        $userTransfer->setIdUser(1);
+        $userFacadeMock->method('getCurrentUser')->willReturn($userTransfer);
+
+        // Create acl facade mock
+        $aclFacadeMock = $this->createMock(AclFacadeInterface::class);
+        $aclGroupsTransfer = new AclGroupsTransfer();
+        $aclFacadeMock->method('getUserGroups')->willReturn($aclGroupsTransfer);
+
+        // Create reader with mocked repository, user facade, and acl facade
+        $tourGuideReader = new TourGuideReader($repositoryMock, $userFacadeMock, $aclFacadeMock);
 
         // Create writer with mocked entity manager and repository
         $tourGuideWriter = new TourGuideWriter($entityManagerMock, $repositoryMock);
@@ -488,8 +547,19 @@ final class TourGuideFacadeIntegrationTest extends TestCase
                 return $id === 1;
             });
 
-        // Create reader with mocked repository
-        $tourGuideReader = new TourGuideReader($repositoryMock);
+        // Create user facade mock
+        $userFacadeMock = $this->createMock(UserFacadeInterface::class);
+        $userTransfer = new UserTransfer();
+        $userTransfer->setIdUser(1);
+        $userFacadeMock->method('getCurrentUser')->willReturn($userTransfer);
+
+        // Create acl facade mock
+        $aclFacadeMock = $this->createMock(AclFacadeInterface::class);
+        $aclGroupsTransfer = new AclGroupsTransfer();
+        $aclFacadeMock->method('getUserGroups')->willReturn($aclGroupsTransfer);
+
+        // Create reader with mocked repository, user facade, and acl facade
+        $tourGuideReader = new TourGuideReader($repositoryMock, $userFacadeMock, $aclFacadeMock);
 
         // Create writer with mocked entity manager and repository
         $tourGuideWriter = new TourGuideWriter($entityManagerMock, $repositoryMock);

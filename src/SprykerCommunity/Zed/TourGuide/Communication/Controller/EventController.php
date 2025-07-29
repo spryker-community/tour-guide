@@ -48,38 +48,13 @@ final class EventController extends AbstractController
         );
     }
 
-    public function startAction(Request $request): JsonResponse
+    public function trackAction(Request $request): JsonResponse
     {
         $idTourGuide = (int)$request->request->get('idTourGuide');
         $tourVersion = (int)$request->request->get('tourVersion', 1);
+        $eventName = $request->request->get('eventName');
 
-        $tourGuideEventTransfer = $this->getFacade()->trackTourGuideEvent($idTourGuide, 'start', $tourVersion);
-
-        return $this->jsonResponse([
-            'success' => true,
-            'idTourGuideEvent' => $tourGuideEventTransfer->getIdTourGuideEvent(),
-        ]);
-    }
-
-    public function pauseAction(Request $request): JsonResponse
-    {
-        $idTourGuide = $this->castId($request->request->get('idTourGuide'));
-        $tourVersion = (int)$request->request->get('tourVersion', 1);
-
-        $tourGuideEventTransfer = $this->getFacade()->trackTourGuideEvent($idTourGuide, 'pause', $tourVersion);
-
-        return $this->jsonResponse([
-            'success' => true,
-            'idTourGuideEvent' => $tourGuideEventTransfer->getIdTourGuideEvent(),
-        ]);
-    }
-
-    public function finishAction(Request $request): JsonResponse
-    {
-        $idTourGuide = $this->castId($request->request->get('idTourGuide'));
-        $tourVersion = (int)$request->request->get('tourVersion', 1);
-
-        $tourGuideEventTransfer = $this->getFacade()->trackTourGuideEvent($idTourGuide, 'finish', $tourVersion);
+        $tourGuideEventTransfer = $this->getFacade()->trackTourGuideEvent($idTourGuide, $eventName, $tourVersion);
 
         return $this->jsonResponse([
             'success' => true,

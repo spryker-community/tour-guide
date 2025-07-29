@@ -3,7 +3,7 @@
     <table name="pyz_tour_guide_event" idMethod="native" phpName="PyzTourGuideEvent">
         <column name="id_tour_guide_event" required="true" type="INTEGER" autoIncrement="true" primaryKey="true"/>
         <column name="fk_tour_guide" required="true" type="INTEGER"/>
-        <column name="event_type" required="true" type="ENUM" valueSet="start, pause, finish"/>
+        <column name="event_type" required="true" type="ENUM" valueSet="start, pause, finish, cancel"/>
         <column name="tour_version" required="true" type="INTEGER"/>
         <column name="created_at" required="true" type="TIMESTAMP" defaultExpr="CURRENT_TIMESTAMP"/>
 
