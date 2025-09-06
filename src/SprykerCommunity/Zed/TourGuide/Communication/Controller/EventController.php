@@ -17,7 +17,7 @@ use Symfony\Component\HttpFoundation\Request;
  * @method \SprykerCommunity\Zed\TourGuide\Communication\TourGuideCommunicationFactory getFactory()
  * @method \SprykerCommunity\Zed\TourGuide\Business\TourGuideFacadeInterface getFacade()
  */
-final class EventController extends AbstractController
+class EventController extends AbstractController
 {
     public function indexAction(Request $request): array
     {

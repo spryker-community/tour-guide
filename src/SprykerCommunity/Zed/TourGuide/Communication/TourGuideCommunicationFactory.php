@@ -26,7 +26,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
 /**
  * @method \SprykerCommunity\Zed\TourGuide\Business\TourGuideFacadeInterface getFacade()
  */
-final class TourGuideCommunicationFactory extends AbstractCommunicationFactory
+class TourGuideCommunicationFactory extends AbstractCommunicationFactory
 {
     public function createTourGuideTable(): TourGuideTable
     {

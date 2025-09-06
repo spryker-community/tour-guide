@@ -29,7 +29,7 @@ use Symfony\Component\Routing\RouterInterface;
  * @method \SprykerCommunity\Zed\TourGuide\Persistence\TourGuideRepositoryInterface getRepository()
  * @method \SprykerCommunity\Zed\TourGuide\Persistence\TourGuideEntityManagerInterface getEntityManager()
  */
-final class TourGuideBusinessFactory extends AbstractBusinessFactory
+class TourGuideBusinessFactory extends AbstractBusinessFactory
 {
     public function createTourGuideReader(): TourGuideReaderInterface
     {

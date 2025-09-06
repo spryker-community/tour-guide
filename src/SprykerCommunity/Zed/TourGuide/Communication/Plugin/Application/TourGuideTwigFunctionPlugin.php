@@ -20,7 +20,7 @@ use Twig\TwigFunction;
  * @method \SprykerCommunity\Zed\TourGuide\Business\TourGuideFacadeInterface getFacade()
  * @method \SprykerCommunity\Zed\TourGuide\Communication\TourGuideCommunicationFactory getFactory()
  */
-final class TourGuideTwigFunctionPlugin extends AbstractPlugin implements TwigPluginInterface
+class TourGuideTwigFunctionPlugin extends AbstractPlugin implements TwigPluginInterface
 {
     /**
      * @phpcsSuppress SlevomatCodingStandard.Functions.UnusedParameter
