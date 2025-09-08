@@ -12,6 +12,7 @@ namespace SprykerCommunityTest\Zed\TourGuide\Business\Writer;
 use Generated\Shared\Transfer\TourGuideStepTransfer;
 use Generated\Shared\Transfer\TourGuideTransfer;
 use PHPUnit\Framework\TestCase;
+use SprykerCommunity\Zed\TourGuide\Business\Sanitizer\TourGuideSanitizerInterface;
 use SprykerCommunity\Zed\TourGuide\Business\Writer\TourGuideWriter;
 use SprykerCommunity\Zed\TourGuide\Persistence\TourGuideEntityManagerInterface;
 use SprykerCommunity\Zed\TourGuide\Persistence\TourGuideRepositoryInterface;
@@ -35,9 +36,16 @@ final class TourGuideWriterTest extends TestCase
 
         $tourGuideRepositoryMock = $this->createMock(TourGuideRepositoryInterface::class);
 
+        $tourGuideSanitizerMock = $this->createMock(TourGuideSanitizerInterface::class);
+        $tourGuideSanitizerMock->expects($this->once())
+            ->method('sanitizeTourGuideStepTransfer')
+            ->with($tourGuideStepTransfer)
+            ->willReturn($tourGuideStepTransfer);
+
         $tourGuideWriter = new TourGuideWriter(
             $tourGuideEntityManagerMock,
             $tourGuideRepositoryMock,
+            $tourGuideSanitizerMock,
         );
 
         // Act
@@ -70,9 +78,16 @@ final class TourGuideWriterTest extends TestCase
             ->with($tourGuideStepTransfer)
             ->willReturn($expectedTourGuideStepTransfer);
 
+        $tourGuideSanitizerMock = $this->createMock(TourGuideSanitizerInterface::class);
+        $tourGuideSanitizerMock->expects($this->once())
+            ->method('sanitizeTourGuideStepTransfer')
+            ->with($tourGuideStepTransfer)
+            ->willReturn($tourGuideStepTransfer);
+
         $tourGuideWriter = new TourGuideWriter(
             $tourGuideEntityManagerMock,
             $tourGuideRepositoryMock,
+            $tourGuideSanitizerMock,
         );
 
         // Act
@@ -104,9 +119,16 @@ final class TourGuideWriterTest extends TestCase
             ->with($tourGuideStepTransfer)
             ->willReturn($expectedTourGuideStepTransfer);
 
+        $tourGuideSanitizerMock = $this->createMock(TourGuideSanitizerInterface::class);
+        $tourGuideSanitizerMock->expects($this->once())
+            ->method('sanitizeTourGuideStepTransfer')
+            ->with($tourGuideStepTransfer)
+            ->willReturn($tourGuideStepTransfer);
+
         $tourGuideWriter = new TourGuideWriter(
             $tourGuideEntityManagerMock,
             $tourGuideRepositoryMock,
+            $tourGuideSanitizerMock,
         );
 
         // Act
@@ -133,9 +155,12 @@ final class TourGuideWriterTest extends TestCase
 
         $tourGuideRepositoryMock = $this->createMock(TourGuideRepositoryInterface::class);
 
+        $tourGuideSanitizerMock = $this->createMock(TourGuideSanitizerInterface::class);
+
         $tourGuideWriter = new TourGuideWriter(
             $tourGuideEntityManagerMock,
             $tourGuideRepositoryMock,
+            $tourGuideSanitizerMock,
         );
 
         // Act
@@ -162,9 +187,12 @@ final class TourGuideWriterTest extends TestCase
 
         $tourGuideRepositoryMock = $this->createMock(TourGuideRepositoryInterface::class);
 
+        $tourGuideSanitizerMock = $this->createMock(TourGuideSanitizerInterface::class);
+
         $tourGuideWriter = new TourGuideWriter(
             $tourGuideEntityManagerMock,
             $tourGuideRepositoryMock,
+            $tourGuideSanitizerMock,
         );
 
         // Act
@@ -197,9 +225,12 @@ final class TourGuideWriterTest extends TestCase
             ->with($tourGuideTransfer)
             ->willReturn($expectedTourGuideTransfer);
 
+        $tourGuideSanitizerMock = $this->createMock(TourGuideSanitizerInterface::class);
+
         $tourGuideWriter = new TourGuideWriter(
             $tourGuideEntityManagerMock,
             $tourGuideRepositoryMock,
+            $tourGuideSanitizerMock,
         );
 
         // Act
@@ -231,9 +262,12 @@ final class TourGuideWriterTest extends TestCase
             ->with($tourGuideTransfer)
             ->willReturn($expectedTourGuideTransfer);
 
+        $tourGuideSanitizerMock = $this->createMock(TourGuideSanitizerInterface::class);
+
         $tourGuideWriter = new TourGuideWriter(
             $tourGuideEntityManagerMock,
             $tourGuideRepositoryMock,
+            $tourGuideSanitizerMock,
         );
 
         // Act
@@ -260,9 +294,12 @@ final class TourGuideWriterTest extends TestCase
 
         $tourGuideRepositoryMock = $this->createMock(TourGuideRepositoryInterface::class);
 
+        $tourGuideSanitizerMock = $this->createMock(TourGuideSanitizerInterface::class);
+
         $tourGuideWriter = new TourGuideWriter(
             $tourGuideEntityManagerMock,
             $tourGuideRepositoryMock,
+            $tourGuideSanitizerMock,
         );
 
         // Act
@@ -270,5 +307,62 @@ final class TourGuideWriterTest extends TestCase
 
         // Assert
         $this->assertSame($expectedResult, $actualResult);
+    }
+
+    /**
+     * @return void
+     */
+    public function testCreateTourGuideStepSanitizesInputToPreventXssAttacks(): void
+    {
+        // Arrange
+        $maliciousTitle = '<script>alert("XSS Title")</script>';
+        $maliciousText = '<script>alert("XSS Text")</script>';
+        $maliciousCssSelector = '<script>alert("XSS Selector")</script>';
+
+        $sanitizedTitle = '&lt;script&gt;alert(&quot;XSS Title&quot;)&lt;/script&gt;';
+        $sanitizedText = '&lt;script&gt;alert(&quot;XSS Text&quot;)&lt;/script&gt;';
+        $sanitizedCssSelector = '&lt;script&gt;alert(&quot;XSS Selector&quot;)&lt;/script&gt;';
+
+        $tourGuideStepTransfer = (new TourGuideStepTransfer())
+            ->setTitle($maliciousTitle)
+            ->setText($maliciousText)
+            ->setAttachToElement($maliciousCssSelector);
+
+        $sanitizedTourGuideStepTransfer = (new TourGuideStepTransfer())
+            ->setTitle($sanitizedTitle)
+            ->setText($sanitizedText)
+            ->setAttachToElement($sanitizedCssSelector);
+
+        $tourGuideEntityManagerMock = $this->createMock(TourGuideEntityManagerInterface::class);
+        $tourGuideEntityManagerMock->expects($this->once())
+            ->method('saveTourGuideStep')
+            ->willReturnCallback(function (TourGuideStepTransfer $transfer) use ($sanitizedTourGuideStepTransfer) {
+                $this->assertEquals($sanitizedTourGuideStepTransfer->getTitle(), $transfer->getTitle());
+                $this->assertEquals($sanitizedTourGuideStepTransfer->getText(), $transfer->getText());
+                $this->assertEquals($sanitizedTourGuideStepTransfer->getAttachToElement(), $transfer->getAttachToElement());
+                return $transfer;
+            });
+
+        $tourGuideRepositoryMock = $this->createMock(TourGuideRepositoryInterface::class);
+
+        $tourGuideSanitizerMock = $this->createMock(TourGuideSanitizerInterface::class);
+        $tourGuideSanitizerMock->expects($this->once())
+            ->method('sanitizeTourGuideStepTransfer')
+            ->with($tourGuideStepTransfer)
+            ->willReturn($sanitizedTourGuideStepTransfer);
+
+        $tourGuideWriter = new TourGuideWriter(
+            $tourGuideEntityManagerMock,
+            $tourGuideRepositoryMock,
+            $tourGuideSanitizerMock,
+        );
+
+        // Act
+        $actualTourGuideStepTransfer = $tourGuideWriter->createTourGuideStep($tourGuideStepTransfer);
+
+        // Assert
+        $this->assertEquals($sanitizedTitle, $actualTourGuideStepTransfer->getTitle());
+        $this->assertEquals($sanitizedText, $actualTourGuideStepTransfer->getText());
+        $this->assertEquals($sanitizedCssSelector, $actualTourGuideStepTransfer->getAttachToElement());
     }
 }
