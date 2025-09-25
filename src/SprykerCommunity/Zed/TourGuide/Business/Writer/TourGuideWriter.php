@@ -11,6 +11,7 @@ namespace SprykerCommunity\Zed\TourGuide\Business\Writer;
 
 use Generated\Shared\Transfer\TourGuideStepTransfer;
 use Generated\Shared\Transfer\TourGuideTransfer;
+use SprykerCommunity\Zed\TourGuide\Business\Sanitizer\TourGuideSanitizerInterface;
 use SprykerCommunity\Zed\TourGuide\Persistence\TourGuideEntityManagerInterface;
 use SprykerCommunity\Zed\TourGuide\Persistence\TourGuideRepositoryInterface;
 
@@ -20,16 +21,21 @@ class TourGuideWriter implements TourGuideWriterInterface
 
     protected TourGuideRepositoryInterface $tourGuideRepository;
 
+    protected TourGuideSanitizerInterface $tourGuideSanitizer;
+
     public function __construct(
         TourGuideEntityManagerInterface $tourGuideEntityManager,
         TourGuideRepositoryInterface $tourGuideRepository,
+        TourGuideSanitizerInterface $tourGuideSanitizer,
     ) {
         $this->tourGuideEntityManager = $tourGuideEntityManager;
         $this->tourGuideRepository = $tourGuideRepository;
+        $this->tourGuideSanitizer = $tourGuideSanitizer;
     }
 
     public function createTourGuideStep(TourGuideStepTransfer $tourGuideStepTransfer): TourGuideStepTransfer
     {
+        $tourGuideStepTransfer = $this->tourGuideSanitizer->sanitizeTourGuideStepTransfer($tourGuideStepTransfer);
         return $this->tourGuideEntityManager->saveTourGuideStep($tourGuideStepTransfer);
     }
 
@@ -43,8 +49,10 @@ class TourGuideWriter implements TourGuideWriterInterface
             return $this->createTourGuideStep($tourGuideStepTransfer);
         }
 
+        $tourGuideStepTransfer = $this->tourGuideSanitizer->sanitizeTourGuideStepTransfer($tourGuideStepTransfer);
         return $this->tourGuideEntityManager->saveTourGuideStep($tourGuideStepTransfer);
     }
+
 
     public function deleteTourGuideStep(int $idTourGuideStep): bool
     {

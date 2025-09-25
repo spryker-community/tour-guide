@@ -12,7 +12,7 @@ namespace SprykerCommunity\Zed\TourGuide;
 use Spryker\Zed\Kernel\AbstractBundleDependencyProvider;
 use Spryker\Zed\Kernel\Container;
 
-final class TourGuideDependencyProvider extends AbstractBundleDependencyProvider
+class TourGuideDependencyProvider extends AbstractBundleDependencyProvider
 {
     /**
      * @uses \Spryker\Zed\Http\Communication\Plugin\Application\HttpApplicationPlugin::SERVICE_REQUEST_STACK

@@ -18,6 +18,8 @@ use SprykerCommunity\Zed\TourGuide\Business\Reader\TourGuideReader;
 use SprykerCommunity\Zed\TourGuide\Business\Reader\TourGuideReaderInterface;
 use SprykerCommunity\Zed\TourGuide\Business\Validator\RouteValidator;
 use SprykerCommunity\Zed\TourGuide\Business\Validator\RouteValidatorInterface;
+use SprykerCommunity\Zed\TourGuide\Business\Sanitizer\TourGuideSanitizer;
+use SprykerCommunity\Zed\TourGuide\Business\Sanitizer\TourGuideSanitizerInterface;
 use SprykerCommunity\Zed\TourGuide\Business\Writer\TourGuideEventWriter;
 use SprykerCommunity\Zed\TourGuide\Business\Writer\TourGuideEventWriterInterface;
 use SprykerCommunity\Zed\TourGuide\Business\Writer\TourGuideWriter;
@@ -29,7 +31,7 @@ use Symfony\Component\Routing\RouterInterface;
  * @method \SprykerCommunity\Zed\TourGuide\Persistence\TourGuideRepositoryInterface getRepository()
  * @method \SprykerCommunity\Zed\TourGuide\Persistence\TourGuideEntityManagerInterface getEntityManager()
  */
-final class TourGuideBusinessFactory extends AbstractBusinessFactory
+class TourGuideBusinessFactory extends AbstractBusinessFactory
 {
     public function createTourGuideReader(): TourGuideReaderInterface
     {
@@ -45,7 +47,13 @@ final class TourGuideBusinessFactory extends AbstractBusinessFactory
         return new TourGuideWriter(
             $this->getEntityManager(),
             $this->getRepository(),
+            $this->createTourGuideSanitizer(),
         );
+    }
+
+    public function createTourGuideSanitizer(): TourGuideSanitizerInterface
+    {
+        return new TourGuideSanitizer();
     }
 
     public function createRouteValidator(): RouteValidatorInterface

@@ -24,7 +24,7 @@ use Spryker\Zed\Kernel\Business\AbstractFacade;
 /**
  * @method \SprykerCommunity\Zed\TourGuide\Business\TourGuideBusinessFactory getFactory()
  */
-final class TourGuideFacade extends AbstractFacade implements TourGuideFacadeInterface
+class TourGuideFacade extends AbstractFacade implements TourGuideFacadeInterface
 {
     /**
      * @api

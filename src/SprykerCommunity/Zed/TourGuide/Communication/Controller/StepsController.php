@@ -14,7 +14,7 @@ use Spryker\Zed\Kernel\Communication\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 
-final class StepsController extends AbstractController
+class StepsController extends AbstractController
 {
     public function indexAction(Request $request): array
     {

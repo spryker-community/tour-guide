@@ -21,7 +21,7 @@ A Spryker module for creating and managing guided tours through your application
 
 ### Installation Steps
 
-### 1. Install Package
+#### 1. Install Package
 
 Add repository to your `composer.json`:
 
@@ -38,7 +38,7 @@ Install the package via Composer:
 composer require spryker-community/quest-2107-guided-tour-feature:dev-main
 ```
 
-### 2. Integrate ZED Controller
+#### 2. Integrate ZED Controller
 
 To make the OMS Visualizer accessible through your Spryker application, follow these steps:
 
@@ -60,7 +60,7 @@ vendor/bin/console transfer:generate
 vendor/bin/console cache:empty-all
 ```
 
-### 3. Install Frontend Assets
+#### 3. Install Frontend Assets
 
 The OMS Visualizer uses Mermaid JS for graph visualization. Follow these steps to install the necessary frontend dependencies and assets:
 
@@ -110,17 +110,17 @@ Note: Replace "other-scripts" with your existing script entries.
 npm run zed
 ```
 
-### 4. Run the database migration
+#### 4. Run the database migration
 
 ```bash
 console propel:install
 ```
 
-### 5. Add Twig Plugin
+#### 5. Add Twig Plugin
 
-Add `TourGuideTwigFunctionPlugin` to your `TwigDependencyProvider`,
+Add `TourGuideTwigFunctionPlugin` to your `DependencyProvider` at `src/Pyz/Zed/Twig/TwigDependencyProvider.php`,
 
-### 6. Call Twig function to ZED template
+#### 6. Call Twig function to ZED template
 
 Override `src/Pyz/Zed/Gui/Presentation/Layout/layout.twig` on project level or choose a specific template of any module and add:
 
@@ -130,7 +130,7 @@ Override `src/Pyz/Zed/Gui/Presentation/Layout/layout.twig` on project level or c
 
 Run `vendor/bin/console twig:cache:warmer` afterward.
 
-### 7. Add navigation entry
+#### 7. Add navigation entry
 
 To have a separate navigation menu for the new Tour Guide, copy the content from `src/SprykerCommunity/Zed/Communication/navigation.xml` into your `config/Zed/navigation.xml`.
 
@@ -139,6 +139,29 @@ Clear the cache for navigation:
 ```
 vendor/bin/console application:build-navigation-cache
 ```
+
+### Create a Tour
+
+#### 1. Add a new tour
+Open the **Tour Guide** from the main navigation and click the **New Tour** button.
+
+Select the route of the backend module where you want to create the tour, and enter a version number. Optionally, you can also assign the tour to a specific user group.
+
+#### 2. Add tour steps
+Click the **Add Step** button to define the steps of your tour. For each step, provide:
+- A **title** and **description text**
+- A **unique CSS selector** (e.g., `a[href="/customer/add"]`) that identifies the element the step should highlight
+- The **position** where the modal should appear
+
+Finally, activate the step.
+
+#### 3. Activate the tour
+Once all steps have been added, activate the tour. It will now be available to backend users when they open the related backend module.
+
+Users can restart the tour at any time by clicking the tour icon in the bottom-right corner (if a tour is available).
+
+#### 4. Tracking tour event
+Each event of each tour and user can be seen in the "Tour Events" section. It is possible to narrow it down by event type and tour route.
 
 ## Screenshot
 
